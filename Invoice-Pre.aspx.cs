@@ -8,6 +8,9 @@ using System.Web.UI.WebControls;
 using System.Data.SqlClient;
 using System.Data;
 using System.Runtime.CompilerServices;
+using System.Web.UI.HtmlControls;
+using AjaxControlToolkit;
+using AjaxControlToolkit.HtmlEditor.ToolbarButtons;
 
 namespace DreamForex
 {
@@ -179,6 +182,50 @@ namespace DreamForex
                         lblRate.Text = dv2.Table.Rows[0]["RATE_TO_CLIENT"].ToString();
                         double compRate = Convert.ToDouble(dv2.Table.Rows[0]["COMM_COMPANY"].ToString());
                         double dreamRate = Convert.ToDouble(dv2.Table.Rows[0]["COMM_DREAM"].ToString());
+                        for(int i= 1; i < dv2.Count; i++)
+                        {
+                            HtmlTableRow tRow = new HtmlTableRow();
+                            currencyTable.Rows.Add(tRow);
+                            tRow.ID = "tr" + i;
+
+                            tRow.Controls.Add(new HtmlTableCell () { ID = "CellCurrent" +i , Align= "Center"  });
+                            tRow.Controls.Add(new HtmlTableCell() { ID = "CellHSN" + i , Align = "Center" });
+                            tRow.Controls.Add(new HtmlTableCell() { ID = "CellFXNo" + i , Align = "Center" });
+                            tRow.Controls.Add(new HtmlTableCell() { ID = "CellRate" + i , Align = "Center" });
+                            tRow.Controls.Add(new HtmlTableCell() { ID = "CellAmount" + i , Align = "Center" });
+                            tRow.Cells[0].Controls.Add(new Label() { CssClass = "disp" ,  Text = dv2.Table.Rows[i]["CURR_CODE"].ToString() });
+                            tRow.Cells[1].Controls.Add(new Label() { CssClass = "disp" , Text = dv2.Table.Rows[i]["FX_QTY"].ToString()});
+                            tRow.Cells[2].Controls.Add(new Label() { CssClass = "disp", Text = dv2.Table.Rows[i]["RATE_TO_CLIENT"].ToString() });
+                            tRow.Cells[3].Controls.Add(new Label() { CssClass = "disp", Text = dv2.Table.Rows[i]["RATE_TO_CLIENT"].ToString() });
+                            tRow.Cells[4].Controls.Add(new Label() { CssClass = "disp", Text = dv2.Table.Rows[i]["RATE_TO_CLIENT"].ToString() });
+                        }
+
+                        if(dv2.Count <10)
+                        {
+                            var rowsRequired = 10- dv2.Count;
+                            for(int i=0; i < rowsRequired; i++)
+                            {
+                                HtmlTableRow tRow = new HtmlTableRow();
+                                currencyTable.Rows.Add(tRow);
+                                tRow.ID = "trBlank" + i;
+                                tRow.Controls.Add(new HtmlTableCell());
+                                tRow.Controls.Add(new HtmlTableCell());
+                                tRow.Controls.Add(new HtmlTableCell());
+                                tRow.Controls.Add(new HtmlTableCell());
+                                tRow.Controls.Add(new HtmlTableCell());
+                            }
+
+                        }
+
+                        //for (int i=0; i<dv2.Count; i++)
+                        //{
+                        //    HtmlTableRow row = currencyTable.Rows[i];
+                        //    //dr = dt.NewRow();
+                        //    //dr["ProductID"] = row.Cells[0].Controls[0];
+                        //    //dr["Quantity"] = row.Cells[2].Controls[0];
+                        //    //dr["Price"] = row.Cells[3].Controls[0];
+                        //    //dt.Rows.Add(dr);
+                        //}
                     }
 
                     DataView dv3 = (DataView)dsHsn.Select(DataSourceSelectArguments.Empty);

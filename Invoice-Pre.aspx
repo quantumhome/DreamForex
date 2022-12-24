@@ -662,7 +662,8 @@
             </tr>
             <tr>
                 <td colspan="5" align="left">
-                    <table width="900px" cellpadding="2" cellspacing="0" border="1px">
+               
+                    <table id="currencyTable" runat="server" width="900px" cellpadding="2" cellspacing="0" border="1">
                         <tr>
                             <td align="center">
                                 <asp:Label ID="Label23" runat="server" Text="CURRENCY" CssClass="disp" Font-Bold="True"></asp:Label>
@@ -682,7 +683,7 @@
                             </td>
                         </tr>
                       
-                        <tr>
+                        <tr id="currencyRow" runat="server">
                             <td align="center">
                                 <asp:Label ID="lblCurr" runat="server" CssClass="disp" Font-Bold="True"></asp:Label>
                             </td>
@@ -699,8 +700,10 @@
                                 <asp:Label ID="LblAmount" runat="server" Text="" CssClass="disp" Font-Bold="True"></asp:Label>
                             </td>
                         </tr>
+
+
                        
-                        <tr>
+                        <%--<tr>
                             <td align="center">
                                 &nbsp;
                             </td>
@@ -716,7 +719,7 @@
                             <td align="center">
                                 &nbsp;
                             </td>
-                        </tr>
+                        </tr>--%>
                     
                     </table>
                 </td>
