@@ -36,11 +36,11 @@ namespace DreamForex
                 DataView dvMem = (DataView)(dsMember.Select(DataSourceSelectArguments.Empty));
                 if (dvMem.Count == 0 )// == null)
                 {
-                    panelForm.Visible = true;
-                    name.Text = wName;
-                    mobile.Text = wMobile;
-                    email.Text = wEmail;
-                    ddlCountry.SelectedValue = "46";
+                    //panelForm.Visible = true;
+                    //name.Text = wName;
+                    //mobile.Text = wMobile;
+                    //email.Text = wEmail;
+                    //ddlCountry.SelectedValue = "46";
                 }
                 //if(!Page.IsPostBack)
                 //{
@@ -61,80 +61,80 @@ namespace DreamForex
 
         protected void btnMember_Click(object sender, EventArgs e)
         {
-            string panFilename = DateTime.Now.ToString("yyyyMMddHHmmssffff") + "_" + fupPan.FileName;
-            string ppFilename = DateTime.Now.ToString("yyyyMMddHHmmssffff") + "_" + fupPassport.FileName;
-            dsUser2.InsertParameters["LOGIN_ID"].DefaultValue = Session["iLoginId"].ToString();
-            dsUser2.InsertParameters["MEM_NAME"].DefaultValue = name.Text;
-            dsUser2.InsertParameters["MEM_GENDER"].DefaultValue = rblGender.SelectedValue;
-            dsUser2.InsertParameters["MEM_MOBILE"].DefaultValue = mobile.Text;
-            dsUser2.InsertParameters["MEM_EMAIL"].DefaultValue = email.Text;
-            dsUser2.InsertParameters["MEM_ADD1"].DefaultValue = txtAdd1.Text;
-            dsUser2.InsertParameters["MEM_ADD2"].DefaultValue = txtAdd2.Text;
-            dsUser2.InsertParameters["STATE_ID"].DefaultValue = ddlState.SelectedValue;
-            dsUser2.InsertParameters["CITY_ID"].DefaultValue = ddlCity.SelectedValue;
-            dsUser2.InsertParameters["PIN"].DefaultValue = txtPin.Text;
-            dsUser2.InsertParameters["PAN_NO"].DefaultValue = txtPan.Text;
-            dsUser2.InsertParameters["PAN_FILE_NAME"].DefaultValue = panFilename;
-            dsUser2.InsertParameters["PASSPORT_NO"].DefaultValue = txtPassport.Text;
-            dsUser2.InsertParameters["PASSPORT_FILE_NAME"].DefaultValue = ppFilename;
-            dsUser2.InsertParameters["COUNTRY_ID"].DefaultValue = ddlCountry.SelectedValue;
-            try
-            {
-                dsUser2.Insert();
-                lblResult.Text = "User Details Saved Successfully";
-                //*-*-*-*-*-*-*-*-*-*-*
-                name.Text = "";
-                rblGender.SelectedIndex = 0;
-                mobile.Text = "";
-                email.Text = "";
-                txtAdd1.Text = "";
-                txtAdd2.Text = "";
-                ddlState.SelectedIndex = 0;
-                ddlCity.SelectedIndex = 0;
-                txtPin.Text = "";
-                txtPan.Text = "";
-                panFilename = "";
-                txtPassport.Text = "";
-                ppFilename = "";
-                ddlCountry.SelectedIndex = 0;
+            //string panFilename = DateTime.Now.ToString("yyyyMMddHHmmssffff") + "_" + fupPan.FileName;
+            //string ppFilename = DateTime.Now.ToString("yyyyMMddHHmmssffff") + "_" + fupPassport.FileName;
+            //dsUser2.InsertParameters["LOGIN_ID"].DefaultValue = Session["iLoginId"].ToString();
+            //dsUser2.InsertParameters["MEM_NAME"].DefaultValue = name.Text;
+            //dsUser2.InsertParameters["MEM_GENDER"].DefaultValue = rblGender.SelectedValue;
+            //dsUser2.InsertParameters["MEM_MOBILE"].DefaultValue = mobile.Text;
+            //dsUser2.InsertParameters["MEM_EMAIL"].DefaultValue = email.Text;
+            //dsUser2.InsertParameters["MEM_ADD1"].DefaultValue = txtAdd1.Text;
+            //dsUser2.InsertParameters["MEM_ADD2"].DefaultValue = txtAdd2.Text;
+            //dsUser2.InsertParameters["STATE_ID"].DefaultValue = ddlState.SelectedValue;
+            //dsUser2.InsertParameters["CITY_ID"].DefaultValue = ddlCity.SelectedValue;
+            //dsUser2.InsertParameters["PIN"].DefaultValue = txtPin.Text;
+            //dsUser2.InsertParameters["PAN_NO"].DefaultValue = txtPan.Text;
+            //dsUser2.InsertParameters["PAN_FILE_NAME"].DefaultValue = panFilename;
+            //dsUser2.InsertParameters["PASSPORT_NO"].DefaultValue = txtPassport.Text;
+            //dsUser2.InsertParameters["PASSPORT_FILE_NAME"].DefaultValue = ppFilename;
+            //dsUser2.InsertParameters["COUNTRY_ID"].DefaultValue = ddlCountry.SelectedValue;
+            //try
+            //{
+            //    dsUser2.Insert();
+            //    lblResult.Text = "User Details Saved Successfully";
+            //    //*-*-*-*-*-*-*-*-*-*-*
+            //    name.Text = "";
+            //    rblGender.SelectedIndex = 0;
+            //    mobile.Text = "";
+            //    email.Text = "";
+            //    txtAdd1.Text = "";
+            //    txtAdd2.Text = "";
+            //    ddlState.SelectedIndex = 0;
+            //    ddlCity.SelectedIndex = 0;
+            //    txtPin.Text = "";
+            //    txtPan.Text = "";
+            //    panFilename = "";
+            //    txtPassport.Text = "";
+            //    ppFilename = "";
+            //    ddlCountry.SelectedIndex = 0;
 
-                //*-*-*-*-*-*-*-*-*-*-*
-                try
-                {
-                    string folderPath = Server.MapPath("~/PAN_Images/");
-                    fupPan.SaveAs(folderPath + DateTime.Now.ToString("yyyyMMddHHmmssffff") + "_" + fupPan.FileName);
-                    lblResult.Text += "<br>PAN Image saved";
+            //    //*-*-*-*-*-*-*-*-*-*-*
+            //    try
+            //    {
+            //        string folderPath = Server.MapPath("~/PAN_Images/");
+            //        fupPan.SaveAs(folderPath + DateTime.Now.ToString("yyyyMMddHHmmssffff") + "_" + fupPan.FileName);
+            //        lblResult.Text += "<br>PAN Image saved";
 
-                }
-                catch (Exception)
-                {
-                    lblResult.Text += "<br>PAN Image NOT saved";
-                }
+            //    }
+            //    catch (Exception)
+            //    {
+            //        lblResult.Text += "<br>PAN Image NOT saved";
+            //    }
 
-                try
-                {
-                    string folderPathPP = Server.MapPath("~/PP_Images/");
-                    fupPassport.SaveAs(folderPathPP + DateTime.Now.ToString("yyyyMMddHHmmssffff") + "_" + fupPassport.FileName);
+            //    try
+            //    {
+            //        string folderPathPP = Server.MapPath("~/PP_Images/");
+            //        fupPassport.SaveAs(folderPathPP + DateTime.Now.ToString("yyyyMMddHHmmssffff") + "_" + fupPassport.FileName);
 
-                    lblResult.Text += "<br>Passport Image saved";
-                }
-                catch (Exception)
-                {
-                    lblResult.Text += "<br>Passport Image NOT saved";
-                }
+            //        lblResult.Text += "<br>Passport Image saved";
+            //    }
+            //    catch (Exception)
+            //    {
+            //        lblResult.Text += "<br>Passport Image NOT saved";
+            //    }
 
-            }
-            catch (Exception ex)
-            {
-                lblResult.Text = "Sorry, could not Save.. Try again later..<br />" + ex.ToString();
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    lblResult.Text = "Sorry, could not Save.. Try again later..<br />" + ex.ToString();
+            //}
 
         }
 
         protected void lbtnAddNewMember_Click(object sender, EventArgs e)
         {
-            panelForm.Visible = true;
-            lblResult.Text = "";
+            //panelForm.Visible = true;
+            //lblResult.Text = "";
         }
 
         protected void GridView2_SelectedIndexChanged(object sender, EventArgs e)
@@ -160,7 +160,7 @@ namespace DreamForex
                 if (dv1.Count > 0)
                 {
                     lblPartyName.Text = dv1.Table.Rows[0]["MEM_NAME"].ToString();
-                    lblPartyAddress.Text = dv1.Table.Rows[0]["MEM_ADD1"].ToString() + " " + dv1.Table.Rows[0]["MEM_ADD2"].ToString();
+                    lblPartyAddress.Text = dv1.Table.Rows[0]["CITY_NAME"].ToString() + ", " + dv1.Table.Rows[0]["STATE_NAME"].ToString() + ", " + dv1.Table.Rows[0]["COUNTRY_NAME"].ToString();
 
                     lblPartyMobile.Text = dv1.Table.Rows[0]["MEM_MOBILE"].ToString();
                     //iTxtEmail.Text = dv1.Table.Rows[0]["MEM_EMAIL"].ToString();
@@ -178,8 +178,9 @@ namespace DreamForex
                     if (dv2.Count > 0)
                     {
                         lblCurr.Text = dv2.Table.Rows[0]["CURR_CODE"].ToString();
-                        LblAmount.Text = dv2.Table.Rows[0]["FX_QTY"].ToString();
                         lblRate.Text = dv2.Table.Rows[0]["RATE_TO_CLIENT"].ToString();
+                        lblFXNo.Text = dv2.Table.Rows[0]["FX_QTY"].ToString();
+                        LblAmount.Text = dv2.Table.Rows[0]["AMOUNT_TOTAL"].ToString();
                         double compRate = Convert.ToDouble(dv2.Table.Rows[0]["COMM_COMPANY"].ToString());
                         double dreamRate = Convert.ToDouble(dv2.Table.Rows[0]["COMM_DREAM"].ToString());
                         for(int i= 1; i < dv2.Count; i++)
@@ -194,10 +195,10 @@ namespace DreamForex
                             tRow.Controls.Add(new HtmlTableCell() { ID = "CellRate" + i , Align = "Center" });
                             tRow.Controls.Add(new HtmlTableCell() { ID = "CellAmount" + i , Align = "Center" });
                             tRow.Cells[0].Controls.Add(new Label() { CssClass = "disp" ,  Text = dv2.Table.Rows[i]["CURR_CODE"].ToString() });
-                            tRow.Cells[1].Controls.Add(new Label() { CssClass = "disp" , Text = dv2.Table.Rows[i]["FX_QTY"].ToString()});
-                            tRow.Cells[2].Controls.Add(new Label() { CssClass = "disp", Text = dv2.Table.Rows[i]["RATE_TO_CLIENT"].ToString() });
+                            //tRow.Cells[1].Controls.Add(new Label() { CssClass = "disp" , Text = dv2.Table.Rows[i]["FX_QTY"].ToString()});
+                            tRow.Cells[2].Controls.Add(new Label() { CssClass = "disp", Text = dv2.Table.Rows[i]["FX_QTY"].ToString() });
                             tRow.Cells[3].Controls.Add(new Label() { CssClass = "disp", Text = dv2.Table.Rows[i]["RATE_TO_CLIENT"].ToString() });
-                            tRow.Cells[4].Controls.Add(new Label() { CssClass = "disp", Text = dv2.Table.Rows[i]["RATE_TO_CLIENT"].ToString() });
+                            tRow.Cells[4].Controls.Add(new Label() { ID= "LblAmount" + i, CssClass = "disp", Text = dv2.Table.Rows[i]["AMOUNT_TOTAL"].ToString() });
                         }
 
                         if(dv2.Count <10)
@@ -242,8 +243,46 @@ namespace DreamForex
                         int iIgstrate = Convert.ToInt32(dv3.Table.Rows[0]["IGST"].ToString());
 
                         double iCgstAmt = 0, iSgstAmt = 0, iIgstAmt = 0;
+                        double wRs = 0;
+                        foreach (Control ctr in currencyTable.Controls)
+                        {
+                            if(ctr is HtmlTableRow)
+                            {
+                                foreach(Control  td in ctr.Controls)
+                                {
+                                    if(td is HtmlTableCell)
+                                    {
+                                        foreach(Control lblAmounts in td.Controls)
+                                        {
+                                            if (lblAmounts is Label)
+                                            {
+                                                if (lblAmounts.ID!= null &&  lblAmounts.ID.Contains("LblAmount"))
+                                                {
+                                                    var amount = (Label)lblAmounts;
+                                                    wRs += Math.Round(Convert.ToDouble(amount.Text));
+                                                }
+                                            }
+                                            //if(htmlTableCell.HasControls)
+                                            //foreach(Control labels in htmlTableCell)
+                                            //{
+                                            //    if(labels is Label && ctr.ID.Contains("LblAmount"))
+                                            //    {
 
-                        double wRs = Math.Round(Convert.ToDouble(LblAmount.Text) * Convert.ToDouble(lblRate.Text));
+                                            //    }
+                                            //}
+                                            //if(htmlTableCell is Label && ctr.ID.Contains("LblAmount"))
+                                            //{
+                                            //    && 
+                                            //}
+                                        }
+                                    }
+                                }
+                               
+                                //wRs += Math.Round(Convert.ToDouble(label.Text));
+                            }
+                        }
+                        
+                         //wRs = Math.Round(Convert.ToDouble(LblAmount.Text) * Convert.ToDouble(lblRate.Text));
                         lblAmtWords.Text = wRs.ToString();
 
                         //GST Calculation
@@ -293,9 +332,9 @@ namespace DreamForex
 
                         //****************
 
-                        //double iCgstAmt = (wRs * iCgst) / 100;
-                        //double iSgstAmt =  (wRs *  iSgst )/ 100;
-                        //double iIgstAmt = (wRs * iIgst )/ 100;
+                         //iCgstAmt = (iCgstAmt) / 100;
+                         //iSgstAmt = (iSgstAmt) / 100;
+                         //iIgstAmt = (iIgstAmt) / 100;
 
                         lblAmtCGST.Text = iCgstAmt.ToString();
                         lblAmtSGST.Text = iSgstAmt.ToString();

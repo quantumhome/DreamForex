@@ -173,7 +173,7 @@
     <asp:LinkButton ID="lbtnAddNewMember" class="btn btn-warning" Visible="false" runat="server" OnClick="lbtnAddNewMember_Click">Add New Member</asp:LinkButton>
     <br />
 
-    <asp:Panel ID="panelForm" runat="server" Visible="False" >
+  <%--  <asp:Panel ID="panelForm" runat="server" Visible="False" >
         <asp:Label ID="lblNewMemberName" runat="server" Text="New Member Details" Style="font-size: medium; color: #000066"></asp:Label>
         <div class="col-sm-4" style="background-color: antiquewhite;">
             <div class="form-group">
@@ -274,7 +274,7 @@
                 <br />
             </div>
         </div>
-    </asp:Panel>
+    </asp:Panel>--%>
 
     <!-- Modal -->
     <asp:LinkButton ID="lbtnDummy" runat="server"></asp:LinkButton>
@@ -294,7 +294,7 @@
       <asp:SqlDataSource ID="dsHsn" runat="server" ConnectionString="<%$ ConnectionStrings:FOREXConnectionString %>" SelectCommand="SELECT * FROM [HSN]"></asp:SqlDataSource>
     
     <asp:Panel ID="panelPopup" runat="server"
-        Style="background-color: #F9F9F9; padding: 15px" ScrollBars="Vertical" >
+        Style="background-color: #F9F9F9; padding: 15px"  Width="1000px" CssClass="popup" Height="800px" ScrollBars="Vertical" >
       <%--  <div class="invHeader">
             <asp:Label ID="mLblResult" runat="server" Text="" Style="font-size: large"></asp:Label>
             <table>
@@ -470,8 +470,8 @@
 
             </table>
         </div>--%>
-        <div>
-        <table width="900px"  cellpadding="5" cellspacing="0" border="0px" >
+      <div id="Div1" runat="server" style="max-height: 800px; ">
+        <table width="100%"  cellpadding="5" cellspacing="0" border="0px" >
             <tr>
                 <td style="width: 150px; height: 1px" align="left">
                     &nbsp;
@@ -628,10 +628,10 @@
             </tr>
             <tr>
                 <td align="left">
-                    <asp:Label ID="Label12" runat="server" Text="Proceed to : " CssClass="disp"></asp:Label>
+                 <%--   <asp:Label ID="Label12" runat="server" Text="Proceed to : " CssClass="disp"></asp:Label>--%>
                 </td>
                 <td align="left">
-                    <asp:Label ID="lblProceed" runat="server" CssClass="disp" Font-Bold="True"></asp:Label>
+                    <%--<asp:Label ID="lblProceed" runat="server" CssClass="disp" Font-Bold="True"></asp:Label>--%>
                 </td>
                 <td align="left">
                     <asp:Label ID="Label21" runat="server" Text=" " CssClass="disp"></asp:Label>
@@ -863,7 +863,25 @@
             </tr>
             <tr>
                 <td  align="left">
+                   <asp:Button ID="btnClose" Class="btn btn-danger" runat="server" Text="Close" />
+                </td>
+                <td align="left">
                     &nbsp;
+                </td>
+                <td align="left">
+                    &nbsp;
+                </td>
+                <td  align="right">
+                    &nbsp;
+                </td>
+                <td  align="right">
+                    &nbsp;
+                </td>
+            </tr>
+
+            <tr>
+                <td  align="left">
+                  
                 </td>
                 <td align="left">
                     &nbsp;
@@ -882,7 +900,7 @@
     </div>
         <div class="footer">
             <br />
-            <asp:Button ID="btnClose" Class="btn btn-danger" runat="server" Text="Close" />
+            
             <asp:SqlDataSource ID="dsIcity" runat="server" ConnectionString="<%$ ConnectionStrings:FOREXConnectionString %>" SelectCommand="SELECT [CITY_ID], [CITY_NAME] FROM [MST_CITY] ORDER BY [CITY_NAME]"></asp:SqlDataSource>
             <br />
             <br />
