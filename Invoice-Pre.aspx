@@ -93,10 +93,15 @@
         <Columns>
             <asp:TemplateField HeaderText="Invoice" ShowHeader="False">
                 <ItemTemplate>
-                    <asp:LinkButton ID="lbtnGenInv" class="btn btn-info " runat="server" CommandName="select"> <small>Generate</small></asp:LinkButton>
+                    <asp:LinkButton ID="lbtnGenInv" class="btn btn-info " runat="server" CommandName="select"> <small>Invoice Details</small></asp:LinkButton>
                 </ItemTemplate>
             </asp:TemplateField>
-            <asp:CommandField ShowEditButton="True" />
+             <asp:TemplateField HeaderText="Certificate Details" ShowHeader="False">
+                <ItemTemplate>
+                    <asp:LinkButton ID="lblCertificateInv" class="btn btn-info " runat="server" CommandName="select"> <small>Certificate Details</small></asp:LinkButton>
+                </ItemTemplate>
+            </asp:TemplateField>
+           <%-- <asp:CommandField ShowEditButton="True" />--%>
             <asp:BoundField DataField="MEMBER_ID" HeaderText="MEMBER_ID" InsertVisible="False" ReadOnly="True" SortExpression="MEMBER_ID" Visible="False" />
             <asp:BoundField DataField="LOGIN_ID" HeaderText="LOGIN_ID" SortExpression="LOGIN_ID" Visible="False" />
             <asp:BoundField DataField="MEM_NAME" HeaderText="Name" SortExpression="MEM_NAME" />

@@ -209,11 +209,11 @@ namespace DreamForex
                                 HtmlTableRow tRow = new HtmlTableRow();
                                 currencyTable.Rows.Add(tRow);
                                 tRow.ID = "trBlank" + i;
-                                tRow.Controls.Add(new HtmlTableCell());
-                                tRow.Controls.Add(new HtmlTableCell());
-                                tRow.Controls.Add(new HtmlTableCell());
-                                tRow.Controls.Add(new HtmlTableCell());
-                                tRow.Controls.Add(new HtmlTableCell());
+                                tRow.Controls.Add(new HtmlTableCell() { InnerHtml = "&nbsp;" });
+                                tRow.Controls.Add(new HtmlTableCell() { InnerHtml = "&nbsp;" });
+                                tRow.Controls.Add(new HtmlTableCell() { InnerHtml = "&nbsp;" });
+                                tRow.Controls.Add(new HtmlTableCell() { InnerHtml = "&nbsp;" });
+                                tRow.Controls.Add(new HtmlTableCell() { InnerHtml = "&nbsp;" });
                             }
 
                         }
@@ -476,6 +476,8 @@ namespace DreamForex
             //{
             //    mLblResult.Text = "Please fill up Company Details";
             //}
+
+            Response.Redirect("InvoiceDetails.aspx");
             ModalPopupExtender1.Show();
         }
     }

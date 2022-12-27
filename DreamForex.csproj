@@ -134,6 +134,7 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="InvoiceDetails.aspx" />
     <Content Include="packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll" />
     <Content Include="packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.pdb" />
     <Content Include="packages\AspNet.ScriptManager.bootstrap.3.4.1\lib\net40\AspNet.ScriptManager.bootstrap.dll" />
@@ -508,6 +509,13 @@
     </Compile>
     <Compile Include="Invoice-Pre.aspx.designer.cs">
       <DependentUpon>Invoice-Pre.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="InvoiceDetails.aspx.cs">
+      <DependentUpon>InvoiceDetails.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="InvoiceDetails.aspx.designer.cs">
+      <DependentUpon>InvoiceDetails.aspx</DependentUpon>
     </Compile>
     <Compile Include="InvoiceSub.aspx.cs">
       <DependentUpon>InvoiceSub.aspx</DependentUpon>
