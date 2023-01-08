@@ -11,6 +11,8 @@ using System.Runtime.CompilerServices;
 using System.Web.UI.HtmlControls;
 using AjaxControlToolkit;
 using AjaxControlToolkit.HtmlEditor.ToolbarButtons;
+using Humanizer.Localisation.NumberToWords;
+using Humanizer;
 
 namespace DreamForex
 {
@@ -283,7 +285,7 @@ namespace DreamForex
                         }
                         
                          //wRs = Math.Round(Convert.ToDouble(LblAmount.Text) * Convert.ToDouble(lblRate.Text));
-                        lblAmtWords.Text = wRs.ToString();
+                       
 
                         //GST Calculation
 
@@ -340,6 +342,9 @@ namespace DreamForex
                         lblAmtSGST.Text = iSgstAmt.ToString();
                         lblAmtIGST.Text = iIgstAmt.ToString();
                         lblAmtTotal.Text = (wRs + iCgstAmt + iSgstAmt + iIgstAmt).ToString();
+                        lblAmtWords.Text = Convert.ToInt32(wRs).ToWords();
+                        int number = 0;
+                        double num = 1;
                         //*-*-*-*-*-*-*-*-*-*
                     }
                     // *-*-*-*-*-*-*-*-*-*-*-*-*
