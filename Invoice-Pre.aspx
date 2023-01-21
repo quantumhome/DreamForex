@@ -41,6 +41,34 @@
             <asp:SessionParameter Name="LOGIN_ID" SessionField="iLoginId" Type="Int32" />
         </SelectParameters>
     </asp:SqlDataSource>
+    <asp:SqlDataSource ID="dsInvoice" runat="server" ConnectionString="<%$ ConnectionStrings:FOREXConnectionString %>" SelectCommand="SELECT TOP (1000) [INVOICE_ID],
+         [INVOICE_SERIAL_NO]
+      ,[DT_INVOICE]
+      ,[BOOKING_NO]
+      ,[DT_BOOKING]
+      ,[BOOKING_FLAG]
+      ,[LOGIN_ID]
+      ,[CURR_CODE]
+      ,[FX_QTY]
+      ,[PROD_ID]
+      ,[AMT_ADVANCE]
+      ,[ONLINE_TRANS_ID]
+      ,[DT_ONLINE_TRANS]
+      ,[AMT_ONLINE]
+      ,[RATE_TO_CLIENT]
+      ,[CURRENT_RATE]
+      ,[COMM_COMPANY]
+      ,[COMM_DREAM]
+      ,[AMOUNT_TOTAL]
+      ,[AMOUNT_COMPANY]
+      ,[AMOUNT_DREAM]
+      ,[HSNID]
+  FROM [FOREX].[dbo].[INVOICE]  WHERE LOGIN_ID = @LOGIN_ID AND BOOKING_NO=@BOOKING_NO ORDER BY [INVOICE_SERIAL_NO]" >
+        <SelectParameters>
+            <asp:SessionParameter Name="LOGIN_ID" SessionField="iLoginId" Type="Int32" />
+             <asp:SessionParameter Name="BOOKING_NO" SessionField="iBookingNo" Type="String" />
+        </SelectParameters>
+    </asp:SqlDataSource>
     <asp:SqlDataSource ID="dsUser2" runat="server" ConnectionString="<%$ ConnectionStrings:FOREXConnectionString %>"
         DeleteCommand="DELETE FROM [MST_USER_MEMBER] WHERE [MEMBER_ID] = @MEMBER_ID"
         InsertCommand="INSERT INTO [MST_USER_MEMBER] ([LOGIN_ID], [MEM_NAME], [MEM_GENDER], [MEM_MOBILE], [MEM_EMAIL], [MEM_ADD1], [MEM_ADD2], [STATE_ID], [CITY_ID], [PIN], [PAN_NO], [PAN_FILE_NAME], [PASSPORT_NO], [PASSPORT_FILE_NAME], [COUNTRY_ID], [DT_REGN]) VALUES (@LOGIN_ID, @MEM_NAME, @MEM_GENDER, @MEM_MOBILE, @MEM_EMAIL, @MEM_ADD1, @MEM_ADD2, @STATE_ID, @CITY_ID, @PIN, @PAN_NO, @PAN_FILE_NAME, @PASSPORT_NO, @PASSPORT_FILE_NAME, @COUNTRY_ID, getdate())"

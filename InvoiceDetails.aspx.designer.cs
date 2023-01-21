@@ -123,6 +123,15 @@ namespace DreamForex
         protected global::System.Web.UI.WebControls.SqlDataSource ds_Invoice;
 
         /// <summary>
+        /// dsInvoiceVsBooking control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.SqlDataSource dsInvoiceVsBooking;
+
+        /// <summary>
         /// panelForm control.
         /// </summary>
         /// <remarks>
@@ -418,6 +427,24 @@ namespace DreamForex
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.FileUpload fupPassport;
+
+        /// <summary>
+        /// rfvInvoiceSerialNumber control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvInvoiceSerialNumber;
+
+        /// <summary>
+        /// txtInvoiceSerialNumber control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtInvoiceSerialNumber;
 
         /// <summary>
         /// btnMember control.

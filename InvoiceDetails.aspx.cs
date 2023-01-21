@@ -66,15 +66,29 @@ namespace DreamForex
                         txtAdd2.Text = dvMem.Table.Rows[0]["MEM_ADD2"].ToString();
                         //ddlCountry.SelectedValue = dvM;
                     }
+                    
+                    
                 }
-                //if(!Page.IsPostBack)
-                //{
-                //    if (Session["iBookingNo"] != null && dsBookingBuy != null)
-                //    {
-                //        ViewState["BookingDetails"] = (DataView)(dsBookingBuy.Select(DataSourceSelectArguments.Empty));
-                //    }
-                //}
-
+               
+                DataView dvInvoiceVsBooking = (DataView)(dsInvoiceVsBooking.Select(DataSourceSelectArguments.Empty));
+                if (dvInvoiceVsBooking != null && dvInvoiceVsBooking.Table.Rows.Count > 0)
+                {
+                    txtInvoiceSerialNumber.Text = dvInvoiceVsBooking.Table.Rows[0]["INVOICE_SERIAL_NO"].ToString();
+                    GenerateInvoice();
+                    ModalPopupExtender1.Show();
+                    btnMember.Enabled = false;
+                }
+                DataView dvInvoice = (DataView)(ds_Invoice.Select(DataSourceSelectArguments.Empty));
+                if (dvInvoice != null && dvInvoice.Table.Rows.Count > 0)
+                {
+                    int max_Invoice_Sno = int.Parse(dvInvoice.Table.Rows[0]["INVOICE_SERIAL_NO"].ToString()) + 1;
+                    txtInvoiceSerialNumber.Text = max_Invoice_Sno.ToString();
+                }
+                else
+                {
+                    txtInvoiceSerialNumber.Text = "1";
+                }
+               
             }
             else
             {
@@ -117,7 +131,7 @@ namespace DreamForex
             dsUser2.UpdateParameters["MEMBER_ID"].DefaultValue = Session["MEMBER_ID"].ToString();
             try
             {
-               var response=  dsUser2.Update();
+                var response=  dsUser2.Update();
                 lblResult.Text = "User Details Saved Successfully";
                 //*-*-*-*-*-*-*-*-*-*-*
                 //name.Text = "";
@@ -165,8 +179,19 @@ namespace DreamForex
             {
                 lblResult.Text = "Sorry, could not Save.. Try again later..<br />" + ex.ToString();
             }
+            SaveInvoiceDetails();
             GenerateInvoice();
             ModalPopupExtender1.Show();
+        }
+
+        private void SaveInvoiceDetails()
+        {
+            ds_Invoice.InsertParameters["INVOICE_SERIAL_NO"].DefaultValue = txtInvoiceSerialNumber.Text;
+            ds_Invoice.InsertParameters["DT_INVOICE"].DefaultValue = DateTime.Now.ToString();
+            ds_Invoice.InsertParameters["BOOKING_NO"].DefaultValue = Session["iBookingNo"].ToString();
+            ds_Invoice.InsertParameters["BOOKING_FLAG"].DefaultValue = "T";
+            ds_Invoice.InsertParameters["LOGIN_ID"].DefaultValue = Session["iLoginId"].ToString();
+           var response = ds_Invoice.Insert();
         }
 
         public void GenerateInvoice()
@@ -192,7 +217,7 @@ namespace DreamForex
                 if (dv1.Count > 0)
                 {
                     lblPartyName.Text = dv1.Table.Rows[0]["MEM_NAME"].ToString();
-                    lblPartyAddress.Text = dv1.Table.Rows[0]["MEM_ADD1"].ToString() + "," + dv1.Table.Rows[0]["MEM_ADD2"].ToString() + "," + dv1.Table.Rows[0]["CITY_NAME"].ToString() + "," + dv1.Table.Rows[0]["CITY_NAME"].ToString() + ", " + dv1.Table.Rows[0]["STATE_NAME"].ToString() + ", " + dv1.Table.Rows[0]["COUNTRY_NAME"].ToString();
+                    lblPartyAddress.Text = dv1.Table.Rows[0]["MEM_ADD1"].ToString() + ", " + dv1.Table.Rows[0]["MEM_ADD2"].ToString() + ", " + dv1.Table.Rows[0]["CITY_NAME"].ToString() + ", " + dv1.Table.Rows[0]["STATE_NAME"].ToString() + ", " + dv1.Table.Rows[0]["COUNTRY_NAME"].ToString();
 
                     lblPartyMobile.Text = dv1.Table.Rows[0]["MEM_MOBILE"].ToString();
                     //iTxtEmail.Text = dv1.Table.Rows[0]["MEM_EMAIL"].ToString();
@@ -381,8 +406,12 @@ namespace DreamForex
             {
                 // mLblResult.Text = "Please fill up Company Details";
             }
-
-            lblInvoiceNo.Text =  System.DateTime.Today.Ticks.ToString();
+            //DataView dv_Invoice = (DataView)ds_Invoice.Select(DataSourceSelectArguments.Empty);
+            //if(dv_Invoice!=null)
+            //{
+                lblInvoiceNo.Text = txtInvoiceSerialNumber.Text;
+            //}
+            
             //DataView dv = (DataView)dsCompany.Select(DataSourceSelectArguments.Empty);
             //if (dv.Count > 0)
             //{

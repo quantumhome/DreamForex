@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Microsoft.Ajax.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -88,6 +90,82 @@ namespace DreamForex
             }
         }
 
+        protected void gvBuy_RowUpdating(object sender, GridViewUpdateEventArgs e)
+        {
+            Label lblAMOUNT_TOTAL_INVOICE = (Label)gvBuy.Rows[e.RowIndex].FindControl("lblAMOUNT_TOTAL_INVOICE");
+            Label lblAMOUNT_TOTAL = (Label)gvBuy.Rows[e.RowIndex].FindControl("lblAMOUNT_TOTAL");
+            Label lblAMOUNT_COMPANY_INVOICE = (Label)gvBuy.Rows[e.RowIndex].FindControl("lblAMOUNT_COMPANY_INVOICE");
+            TextBox txtRTCInvoice = (TextBox)gvBuy.Rows[e.RowIndex].FindControl("txtRTCInvoice");
+            Label lblBUY_SUB_ID = (Label)gvBuy.Rows[e.RowIndex].FindControl("lblBUY_SUB_ID");
+            Label lblFX_QTY = (Label)gvBuy.Rows[e.RowIndex].FindControl("lblFX_QTY");
+            Label grdLblAMOUNT_DREAM = (Label)gvBuy.Rows[e.RowIndex].FindControl("grdLblAMOUNT_DREAM");
+
+            
+            dsBuy.UpdateParameters["RATE_TO_CLIENT_INVOICE"].DefaultValue = txtRTCInvoice.Text;
+            var totalAmountInvoice = double.Parse(txtRTCInvoice.Text) * double.Parse(lblFX_QTY.Text);
+            var totalCommissionInvoice = double.Parse(lblAMOUNT_TOTAL.Text) - (totalAmountInvoice - double.Parse(grdLblAMOUNT_DREAM.Text));
+            dsBuy.UpdateParameters["AMOUNT_TOTAL_INVOICE"].DefaultValue = totalAmountInvoice.ToString();
+            dsBuy.UpdateParameters["AMOUNT_COMPANY_INVOICE"].DefaultValue = totalCommissionInvoice.ToString();
+            dsBuy.UpdateParameters["BUY_SUB_ID"].DefaultValue = lblBUY_SUB_ID.Text;
+            
+            try
+            {
+                var response = dsBuy.Update();
+                var select= dsBuy.Select(DataSourceSelectArguments.Empty);
+                dsBuy.DataBind();
+                gvBuy.DataBind();
+            }
+            catch
+            {
+
+            }
+         }
+        protected void OnRowEditing(object sender, GridViewEditEventArgs e)
+        {
+            gvBuy.EditIndex = e.NewEditIndex;
+            gvBuy.DataBind();
+        }
+        protected void OnUpdate(object sender, EventArgs e)
+        {
+            GridViewRow row = (sender as LinkButton).NamingContainer as GridViewRow;
+            
+            Label lblAMOUNT_TOTAL_INVOICE = (Label)gvBuy.Rows[row.RowIndex].FindControl("lblAMOUNT_TOTAL_INVOICE");
+            Label lblAMOUNT_TOTAL = (Label)gvBuy.Rows[row.RowIndex].FindControl("lblAMOUNT_TOTAL");
+            Label lblAMOUNT_COMPANY_INVOICE = (Label)gvBuy.Rows[row.RowIndex].FindControl("lblAMOUNT_COMPANY_INVOICE");
+            TextBox txtRTCInvoice = (TextBox)gvBuy.Rows[row.RowIndex].FindControl("txtRTCInvoice");
+            Label lblBUY_SUB_ID = (Label)gvBuy.Rows[row.RowIndex].FindControl("lblBUY_SUB_ID");
+            Label lblFX_QTY = (Label)gvBuy.Rows[row.RowIndex].FindControl("lblFX_QTY");
+            Label grdLblAMOUNT_DREAM = (Label)gvBuy.Rows[row.RowIndex].FindControl("grdLblAMOUNT_DREAM");
+
+
+            dsBuy.UpdateParameters["RATE_TO_CLIENT_INVOICE"].DefaultValue = txtRTCInvoice.Text;
+            var totalAmountInvoice = double.Parse(txtRTCInvoice.Text) * double.Parse(lblFX_QTY.Text);
+            var totalCommissionInvoice = double.Parse(lblAMOUNT_TOTAL.Text) - (totalAmountInvoice - double.Parse(grdLblAMOUNT_DREAM.Text));
+            dsBuy.UpdateParameters["AMOUNT_TOTAL_INVOICE"].DefaultValue = totalAmountInvoice.ToString();
+            dsBuy.UpdateParameters["AMOUNT_COMPANY_INVOICE"].DefaultValue = totalCommissionInvoice.ToString();
+            dsBuy.UpdateParameters["BUY_SUB_ID"].DefaultValue = lblBUY_SUB_ID.Text;
+
+            try
+            {
+                var response = dsBuy.Update();
+                var select = dsBuy.Select(DataSourceSelectArguments.Empty);
+                dsBuy.DataBind();
+                gvBuy.DataBind();
+            }
+            catch
+            {
+
+            }
+            gvBuy.EditIndex = -1;
+            gvBuy.DataBind();
+        }
+
+        protected void OnCancel(object sender, EventArgs e)
+        {
+            gvBuy.EditIndex = -1;
+            gvBuy.DataBind();
+        }
+
         protected void DropDownList1_SelectedIndexChanged(object sender, EventArgs e)
         {
             hfTab.Value = "book";
@@ -135,6 +213,28 @@ namespace DreamForex
             Session["iLoginId"]= btn.CommandArgument;
             Session["iBookingNo"] = btn.Text;
             Response.Redirect("Invoice-Pre.aspx");
+        }
+
+        protected void lnkGrdBuy_Command(object sender, CommandEventArgs e)
+        {
+
+        }
+        
+        protected void gvBuy_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            //Checking the RowType of the Row  
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                int index= e.Row.RowIndex;
+                
+                Label lblInvoice = e.Row.FindControl("lblINVOICE_ID") as Label;
+                LinkButton editBtn = (LinkButton)e.Row.FindControl("lnkBtnEdit");
+                if (lblInvoice.Text != "")
+                {
+                    editBtn.Visible = false;
+                }
+               
+            }
         }
     }
 }

@@ -44,6 +44,12 @@ namespace DreamForex
                     //email.Text = wEmail;
                     //ddlCountry.SelectedValue = "46";
                 }
+
+                DataView dvInvoice = (DataView)(dsInvoice.Select(DataSourceSelectArguments.Empty));
+                if(dvInvoice!=null && dvInvoice.Count > 0)
+                {
+
+                }
                 //if(!Page.IsPostBack)
                 //{
                 //    if (Session["iBookingNo"] != null && dsBookingBuy != null)

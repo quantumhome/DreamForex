@@ -12,6 +12,7 @@
         });
     </script>
     <br />
+    
     <div id="dvTab">
         <ul class="nav nav-tabs">
             <li><a data-toggle="tab" href="#users" ><div class="btn btn-primary">Create/Edit Users</div></a></li>
@@ -210,14 +211,21 @@
                             <asp:SqlDataSource ID="dsProd1" runat="server" ConnectionString="<%$ ConnectionStrings:FOREXConnectionString %>" SelectCommand="SELECT distinct([PURPOSE]) FROM [MST_PRODUCT] ORDER BY [PURPOSE]"></asp:SqlDataSource>
                             <br />
                             <asp:SqlDataSource ID="dsBuy" runat="server" ConnectionString="<%$ ConnectionStrings:FOREXConnectionString %>"
-                                SelectCommand="AdminBuy" SelectCommandType="StoredProcedure">
-<%--                                <SelectParameters>
-                                    <asp:ControlParameter ControlID="DropDownList1" Name="p_table" PropertyName="SelectedValue" Type="String" />
-                                </SelectParameters>--%>
+                                SelectCommand="AdminBuy" SelectCommandType="StoredProcedure" UpdateCommand="UpdateAdminBuy" UpdateCommandType="StoredProcedure" >
+                                <UpdateParameters>
+                                    <asp:Parameter Name="AMOUNT_TOTAL_INVOICE" Type="Decimal" />
+                                    <asp:Parameter Name="AMOUNT_COMPANY_INVOICE" Type="Decimal" />
+                                    <asp:Parameter Name="RATE_TO_CLIENT_INVOICE" Type="Decimal" />
+                                    <asp:Parameter Name="BUY_SUB_ID" Type="Int32" />
+                                </UpdateParameters>
                             </asp:SqlDataSource>
                             <asp:SqlDataSource ID="dsSell" runat="server" ConnectionString="<%$ ConnectionStrings:FOREXConnectionString %>" SelectCommand="AdminSell" SelectCommandType="StoredProcedure"></asp:SqlDataSource>
                             <br /><br />
-                            <asp:GridView ID="gvBuy" runat="server" ClientIDMode="Static" CellPadding="4" ForeColor="#333333" AutoGenerateColumns="False" DataSourceID="dsBuy" Visible="False">
+                            <div>
+                            <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+                              <ContentTemplate>
+                      <%--         <asp:GridView ID="gvBuy" runat="server" ClientIDMode="Static" CellPadding="4" ForeColor="#333333"  AutoGenerateColumns="False" DataSourceID="dsBuy" Visible="False"  OnRowUpdating="gvBuy_RowUpdating">--%>
+                              <asp:GridView ID="gvBuy" runat="server" ClientIDMode="Static" CellPadding="4" ForeColor="#333333"  AutoGenerateColumns="False" DataSourceID="dsBuy" Visible="False" OnRowUpdating="gvBuy_RowUpdating" OnRowEditing="OnRowEditing" OnRowDataBound="gvBuy_RowDataBound">
                                 <EmptyDataTemplate>
                                     <br />
                                     <asp:Label ID="Label1" runat="server" ForeColor="Red" Text="Sorry, No Data Found.."></asp:Label>
@@ -227,21 +235,37 @@
                                 <AlternatingRowStyle BackColor="White" ForeColor="#284775" />
                                 <Columns>
                                     <asp:BoundField DataField="BUY_ID" HeaderText="BUY_ID" InsertVisible="False" ReadOnly="True" SortExpression="BUY_ID" />
-                                    <asp:TemplateField HeaderText="Booking No" SortExpression="BOOKING_NO">
+                                 <%-- <asp:CommandField ShowEditButton="True" ShowCancelButton="true" ButtonType="Link"  />--%>
+                                     <asp:TemplateField>
+                                        <ItemTemplate>
+                                            <asp:LinkButton Id="lnkBtnEdit" Text="Edit" runat="server" CommandName="Edit" />
+                                        </ItemTemplate>
                                         <EditItemTemplate>
-                                            <asp:TextBox ID="TextBox3" runat="server" Text='<%# Bind("BOOKING_NO") %>'></asp:TextBox>
+                                            <asp:LinkButton Text="Update" runat="server" OnClick="OnUpdate" />
+                                            <asp:LinkButton Text="Cancel" runat="server" OnClick="OnCancel" />
                                         </EditItemTemplate>
+                                    </asp:TemplateField>
+                                     <%-- <asp:TemplateField HeaderText="Edit/Update" SortExpression="Edit">
+                                        <ItemTemplate>
+                                           <asp:LinkButton Text="Edit" ID="lnkGrdBuy" runat="server" OnCommand="lnkGrdBuy_Command" />
+                                        </ItemTemplate>
+                                       
+                                    </asp:TemplateField>--%>
+                                    <asp:TemplateField HeaderText="Booking No" SortExpression="BOOKING_NO">
+                                        <ItemTemplate>
+                                            <asp:Label ID="lblBookingNumber" runat="server" Text='<%# Bind("BOOKING_NO") %>'></asp:Label>
+                                        </ItemTemplate>
                                         <ItemTemplate>
                                             <asp:LinkButton ID="lbtnBuyLoginId" runat="server" CommandArgument='<%# Eval("LOGIN_ID") %>' OnClick="lbtnBuyLoginId_Click" Text='<%# Eval("BOOKING_NO") %>'></asp:LinkButton>
                                         </ItemTemplate>
                                     </asp:TemplateField>
-                                    <asp:BoundField DataField="DT_BOOKING" DataFormatString="{0:dd-MMM-yyyy}" HeaderText="Booking Date" SortExpression="DT_BOOKING" />
+                                    <asp:BoundField DataField="DT_BOOKING" DataFormatString="{0:dd-MMM-yyyy}" HeaderText="Booking Date"  InsertVisible="False" ReadOnly="True" SortExpression="DT_BOOKING" />
                                     <asp:BoundField DataField="LOGIN_ID" HeaderText="LOGIN_ID" InsertVisible="False" ReadOnly="True" SortExpression="LOGIN_ID" Visible="False" />
-                                    <asp:BoundField DataField="MEM_NAME" HeaderText="Name" SortExpression="MEM_NAME" />
+                                    <asp:BoundField DataField="MEM_NAME" HeaderText="Name" InsertVisible="False" ReadOnly="True"  SortExpression="MEM_NAME" />
                                     <asp:TemplateField HeaderText="Mobile/eMail" SortExpression="MOBILENO">
-                                        <EditItemTemplate>
+                                       <%-- <EditItemTemplate>
                                             <asp:TextBox ID="TextBox1" runat="server" Text='<%# Bind("MOBILENO") %>'></asp:TextBox>
-                                        </EditItemTemplate>
+                                        </EditItemTemplate>--%>
                                         <ItemTemplate>
                                             <asp:Label ID="Label1" runat="server" Text='<%# Bind("MOBILENO") %>'></asp:Label>
                                             <br />
@@ -249,24 +273,59 @@
                                         </ItemTemplate>
                                     </asp:TemplateField>
                                     <asp:BoundField DataField="EMAILID" HeaderText="EMAILID" SortExpression="EMAILID" Visible="False" />
-                                    <asp:BoundField DataField="CURR_CODE" HeaderText="Currency" SortExpression="CURR_CODE" />
-                                    <asp:BoundField DataField="FX_QTY" HeaderText="Forex Qty" SortExpression="FX_QTY" />
-                                    <asp:BoundField DataField="Pay Mode" HeaderText="Pay Mode" SortExpression="Pay Mode" />
-                                    <asp:BoundField DataField="ONLINE_TRANS_ID" HeaderText="Online Trans ID" SortExpression="ONLINE_TRANS_ID" />
-                                    <asp:BoundField DataField="AMT_ONLINE" HeaderText="Online Amount" SortExpression="AMT_ONLINE" />
-                                    <asp:BoundField DataField="RATE_TO_CLIENT" HeaderText="Rate to Client" SortExpression="RATE_TO_CLIENT" />
-                                    <asp:BoundField DataField="AMOUNT_TOTAL" HeaderText="Total Amount" SortExpression="AMOUNT_TOTAL" />
-                                    <asp:TemplateField HeaderText="Invoice ID" SortExpression="INVOICE_ID">
-                                        <EditItemTemplate>
-                                            <asp:TextBox ID="TextBox2" runat="server" Text='<%# Bind("INVOICE_ID") %>'></asp:TextBox>
+                                    <asp:BoundField DataField="CURR_CODE" InsertVisible="False" ReadOnly="True"  HeaderText="Currency" SortExpression="CURR_CODE" />
+                                    <%--<asp:BoundField DataField="FX_QTY" InsertVisible="False" ReadOnly="True"  HeaderText="Forex Qty" SortExpression="FX_QTY" />--%>
+                                   <asp:TemplateField HeaderText="FX_QTY"  SortExpression="FX_QTY">
+                                        <ItemTemplate>
+                                            <asp:Label ID="lblFX_QTY" runat="server" Text='<%# Bind("FX_QTY") %>'></asp:Label>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:BoundField DataField="Pay Mode" InsertVisible="False" ReadOnly="True"  HeaderText="Pay Mode" SortExpression="Pay Mode" />
+                                   
+                                    <%--<asp:BoundField DataField="RATE_TO_CLIENT_INVOICE" HeaderText="Rate to Client" SortExpression="RATE_TO_CLIENT" />--%>
+                                     <asp:TemplateField HeaderText="RATE TO CLIENT" SortExpression="Rate to Client">
+                                       <EditItemTemplate>
+                                            <asp:TextBox ID="txtRTCInvoice" runat="server" Text='<%# Bind("RATE_TO_CLIENT_INVOICE") %>'></asp:TextBox>
                                         </EditItemTemplate>
                                         <ItemTemplate>
-                                            <asp:Label ID="Label2" runat="server" Text='<%# Bind("INVOICE_ID") %>'></asp:Label>
+                                            <asp:Label ID="lblRTCInvoice" runat="server" Text='<%# Bind("RATE_TO_CLIENT_INVOICE") %>'></asp:Label>
+                                        </ItemTemplate>
+                                       </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Total Amount Invoice"  SortExpression="AMOUNT_TOTAL">
+                                        <ItemTemplate>
+                                            <asp:Label ID="lblAMOUNT_TOTAL_INVOICE" runat="server" Text='<%# Bind("AMOUNT_TOTAL_INVOICE") %>'></asp:Label>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                     <asp:TemplateField HeaderText="Total Amount"  SortExpression="AMOUNT_TOTAL">
+                                        <ItemTemplate>
+                                            <asp:Label ID="lblAMOUNT_TOTAL" runat="server" Text='<%# Bind("AMOUNT_TOTAL") %>'></asp:Label>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Company Commision Amount"  SortExpression="Company Commision">
+                                        <ItemTemplate>
+                                            <asp:Label ID="lblAMOUNT_COMPANY_INVOICE" runat="server" Text='<%# Bind("AMOUNT_COMPANY_INVOICE") %>'></asp:Label>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                     <asp:TemplateField HeaderText="AMOUNT_DREAM" Visible="false" >
+                                      <ItemTemplate>
+                                      <asp:Label ID="grdLblAMOUNT_DREAM" runat="server" Text='<%# Bind("AMOUNT_DREAM") %>'></asp:Label>
+                                      </ItemTemplate>
+                                     </asp:TemplateField>
+                                     <asp:TemplateField HeaderText="Buy Sub Id"  SortExpression="BUY_SUB_ID" Visible="false">
+                                        <ItemTemplate>
+                                            <asp:Label ID="lblBUY_SUB_ID" runat="server" Text='<%# Bind("BUY_SUB_ID") %>'></asp:Label>
+                                        </ItemTemplate>
+                                    </asp:TemplateField>
+                                    <asp:TemplateField HeaderText="Invoice ID"  SortExpression="INVOICE_ID">
+                                        <ItemTemplate>
+                                            <asp:Label ID="lblINVOICE_ID" runat="server" Text='<%# Bind("INVOICE_ID") %>'></asp:Label>
                                             <br />
                                             <asp:Label ID="Label7" runat="server" Text='<%# Eval("DT_INVOICE", "{0:dd-MMM-yyyy}") %>'></asp:Label>
                                         </ItemTemplate>
                                     </asp:TemplateField>
-                                    <asp:BoundField DataField="DT_INVOICE" HeaderText="DT_INVOICE" SortExpression="DT_INVOICE" Visible="False" />
+                                    <asp:BoundField DataField="DT_INVOICE" InsertVisible="False" ReadOnly="True"  HeaderText="DT_INVOICE" SortExpression="DT_INVOICE" Visible="False" />
+                                    <%-- <asp:BoundField DataField="ONLINE_TRANS_ID" InsertVisible="False" ReadOnly="True"  HeaderText="Online Trans ID" SortExpression="ONLINE_TRANS_ID" />
+                                    <asp:BoundField DataField="AMT_ONLINE" InsertVisible="False" ReadOnly="True"  HeaderText="Online Amount" SortExpression="AMT_ONLINE" />--%>
                                 </Columns>
                                 <EditRowStyle BackColor="#999999" />
                                 <FooterStyle BackColor="#5D7B9D" Font-Bold="True" ForeColor="White" />
@@ -279,6 +338,9 @@
                                 <SortedDescendingCellStyle BackColor="#FFFDF8" />
                                 <SortedDescendingHeaderStyle BackColor="#6F8DAE" />
                             </asp:GridView>
+                                </ContentTemplate>
+                             </asp:UpdatePanel> 
+                            </div>
                             <br />
                             <asp:GridView ID="gvSell" runat="server" ClientIDMode="Static" CellPadding="4" ForeColor="#333333" AutoGenerateColumns="False" DataSourceID="dsSell" Visible="False">
                                 <EmptyDataTemplate>
@@ -343,4 +405,5 @@
         </div>
         <asp:HiddenField ID="hfTab" runat="server" />
     </div>
+            
 </asp:Content>
