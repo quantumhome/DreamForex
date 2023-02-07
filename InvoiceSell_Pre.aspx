@@ -1,9 +1,9 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="InvoiceDetails.aspx.cs" MasterPageFile="~/SiteAdmin.Master" Inherits="DreamForex.InvoiceDetails" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/SiteAdmin.Master" AutoEventWireup="true" CodeBehind="InvoiceSell_Pre.aspx.cs" Inherits="DreamForex.InvoiceSell_Pre" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-     <style type="text/css">
+    <style type="text/css">
         .modalBg {
             background-color: gray;
             opacity: 0.8;
@@ -23,50 +23,56 @@
           
         }
     </style>
-      <div class=" alert alert-success">
+    <div class=" alert alert-success">
         <asp:Label ID="lblUserDet" runat="server" Text=""></asp:Label>
     </div>
-     <div>
-        <asp:Button ID="Button1" class="btn btn-basic" runat="server" Text="<< Back" PostBackUrl="~/Invoice-Pre.aspx" />
+    <div>
+        <asp:Button ID="Button1" class="btn btn-basic" runat="server" Text="<< Back" PostBackUrl="~/AdminHome.aspx" />
     </div>
-     <asp:SqlDataSource ID="dsUser1" runat="server" ConnectionString="<%$ ConnectionStrings:FOREXConnectionString %>"
+
+    <asp:SqlDataSource ID="dsUser1" runat="server" ConnectionString="<%$ ConnectionStrings:FOREXConnectionString %>"
         SelectCommand="SELECT [MEM_NAME], [MOBILENO], [EMAILID] FROM [MST_USER] WHERE ([LOGIN_ID] = @LOGIN_ID)">
         <SelectParameters>
             <asp:SessionParameter Name="LOGIN_ID" SessionField="iLoginId" Type="Int32" />
         </SelectParameters>
     </asp:SqlDataSource>
-     <asp:SqlDataSource ID="dsMember" runat="server" ConnectionString="<%$ ConnectionStrings:FOREXConnectionString %>" SelectCommand="SELECT MEMBER_ID FROM MST_USER_MEMBER WHERE (LOGIN_ID = @LOGIN_ID)">
+    <asp:SqlDataSource ID="dsMember" runat="server" ConnectionString="<%$ ConnectionStrings:FOREXConnectionString %>" SelectCommand="SELECT MEMBER_ID FROM MST_USER_MEMBER WHERE (LOGIN_ID = @LOGIN_ID)">
         <SelectParameters>
             <asp:SessionParameter Name="LOGIN_ID" SessionField="iLoginId" Type="Int32" />
         </SelectParameters>
     </asp:SqlDataSource>
-      <asp:SqlDataSource ID="dsCompany" runat="server" ConnectionString="<%$ ConnectionStrings:FOREXConnectionString %>"
-        SelectCommand="SELECT MST_COMPANY.*, MST_CITY.CITY_NAME, MST_STATE.STATE_NAME FROM MST_STATE INNER JOIN MST_CITY ON MST_STATE.STATE_ID = MST_CITY.STATE_ID RIGHT OUTER JOIN MST_COMPANY ON MST_CITY.CITY_ID = MST_COMPANY.CITY_ID"></asp:SqlDataSource>
-    <asp:SqlDataSource ID="dsMemberId" runat="server" ConnectionString="<%$ ConnectionStrings:FOREXConnectionString %>" SelectCommand="SELECT MST_USER_MEMBER.MEMBER_ID, MST_USER_MEMBER.LOGIN_ID, MST_USER_MEMBER.MEM_NAME, MST_USER_MEMBER.MEM_GENDER, MST_USER_MEMBER.MEM_MOBILE, MST_USER_MEMBER.MEM_EMAIL, MST_USER_MEMBER.MEM_ADD1, MST_USER_MEMBER.MEM_ADD2, MST_USER_MEMBER.STATE_ID, MST_USER_MEMBER.CITY_ID, MST_USER_MEMBER.PIN, MST_USER_MEMBER.PAN_NO, MST_USER_MEMBER.PAN_FILE_NAME, MST_USER_MEMBER.PASSPORT_NO, MST_USER_MEMBER.PASSPORT_FILE_NAME, MST_USER_MEMBER.COUNTRY_ID, MST_USER_MEMBER.DT_REGN, MST_CITY.CITY_NAME, MST_STATE.STATE_NAME, MST_COUNTRY.COUNTRY_NAME FROM MST_COUNTRY RIGHT OUTER JOIN MST_USER_MEMBER ON MST_COUNTRY.COUNTRY_ID = MST_USER_MEMBER.COUNTRY_ID LEFT OUTER JOIN MST_STATE INNER JOIN MST_CITY ON MST_STATE.STATE_ID = MST_CITY.STATE_ID ON MST_USER_MEMBER.CITY_ID = MST_CITY.CITY_ID WHERE (MST_USER_MEMBER.MEMBER_ID = @MEMBER_ID)">
+    <asp:SqlDataSource ID="dsInvoice" runat="server" ConnectionString="<%$ ConnectionStrings:FOREXConnectionString %>" SelectCommand="SELECT TOP (1000) [INVOICE_ID],
+         [INVOICE_SERIAL_NO]
+      ,[DT_INVOICE]
+      ,[BOOKING_NO]
+      ,[DT_BOOKING]
+      ,[BOOKING_FLAG]
+      ,[LOGIN_ID]
+      ,[CURR_CODE]
+      ,[FX_QTY]
+      ,[PROD_ID]
+      ,[AMT_ADVANCE]
+      ,[ONLINE_TRANS_ID]
+      ,[DT_ONLINE_TRANS]
+      ,[AMT_ONLINE]
+      ,[RATE_TO_CLIENT]
+      ,[CURRENT_RATE]
+      ,[COMM_COMPANY]
+      ,[COMM_DREAM]
+      ,[AMOUNT_TOTAL]
+      ,[AMOUNT_COMPANY]
+      ,[AMOUNT_DREAM]
+      ,[HSNID]
+  FROM [FOREX].[dbo].[INVOICE]  WHERE LOGIN_ID = @LOGIN_ID AND BOOKING_NO=@BOOKING_NO ORDER BY [INVOICE_SERIAL_NO]" >
         <SelectParameters>
-            <asp:SessionParameter Name="MEMBER_ID" SessionField="MEMBER_ID" Type="Int32" />
+            <asp:SessionParameter Name="LOGIN_ID" SessionField="iLoginId" Type="Int32" />
+             <asp:SessionParameter Name="BOOKING_NO" SessionField="iBookingNo" Type="String" />
         </SelectParameters>
     </asp:SqlDataSource>
-   <asp:LinkButton ID="lbtnDummy" runat="server"></asp:LinkButton>
-    <ajaxToolkit:ModalPopupExtender ID="ModalPopupExtender1" runat="server"
-        PopupControlID="panelPopup"
-        TargetControlID="lbtnDummy"
-        CancelControlID="btnClose"
-        BackgroundCssClass="modalBg"  >
-    </ajaxToolkit:ModalPopupExtender>
-    
-    <asp:SqlDataSource ID="dsBookingBuy" runat="server" ConnectionString="<%$ ConnectionStrings:FOREXConnectionString %>"
-        SelectCommand="SELECT * FROM [TRN_BUY] BUY JOIN [TRN_BUY_SUB] BUY_SUB ON BUY.BUY_ID = BUY_SUB.BUY_ID WHERE ([BOOKING_NO] = @BOOKING_NO)">
-        <SelectParameters>
-            <asp:SessionParameter Name="BOOKING_NO" SessionField="iBookingNo" Type="String" />
-        </SelectParameters>
-    </asp:SqlDataSource>
-      <asp:SqlDataSource ID="dsHsn" runat="server" ConnectionString="<%$ ConnectionStrings:FOREXConnectionString %>" SelectCommand="SELECT * FROM [HSN]"></asp:SqlDataSource>
-    
-      <asp:SqlDataSource ID="dsUser2" runat="server" ConnectionString="<%$ ConnectionStrings:FOREXConnectionString %>"
+    <asp:SqlDataSource ID="dsUser2" runat="server" ConnectionString="<%$ ConnectionStrings:FOREXConnectionString %>"
         DeleteCommand="DELETE FROM [MST_USER_MEMBER] WHERE [MEMBER_ID] = @MEMBER_ID"
         InsertCommand="INSERT INTO [MST_USER_MEMBER] ([LOGIN_ID], [MEM_NAME], [MEM_GENDER], [MEM_MOBILE], [MEM_EMAIL], [MEM_ADD1], [MEM_ADD2], [STATE_ID], [CITY_ID], [PIN], [PAN_NO], [PAN_FILE_NAME], [PASSPORT_NO], [PASSPORT_FILE_NAME], [COUNTRY_ID], [DT_REGN]) VALUES (@LOGIN_ID, @MEM_NAME, @MEM_GENDER, @MEM_MOBILE, @MEM_EMAIL, @MEM_ADD1, @MEM_ADD2, @STATE_ID, @CITY_ID, @PIN, @PAN_NO, @PAN_FILE_NAME, @PASSPORT_NO, @PASSPORT_FILE_NAME, @COUNTRY_ID, getdate())"
-        SelectCommand="SELECT MST_USER_MEMBER.MEMBER_ID, MST_USER_MEMBER.LOGIN_ID, MST_USER_MEMBER.MEM_NAME, MST_USER_MEMBER.MEM_GENDER, MST_USER_MEMBER.MEM_MOBILE, MST_USER_MEMBER.MEM_EMAIL, MST_USER_MEMBER.MEM_ADD1, MST_USER_MEMBER.MEM_ADD2, MST_USER_MEMBER.STATE_ID, MST_USER_MEMBER.CITY_ID, MST_USER_MEMBER.COUNTRY_ID, MST_USER_MEMBER.PIN, MST_USER_MEMBER.PAN_NO, MST_USER_MEMBER.PAN_FILE_NAME, MST_USER_MEMBER.PASSPORT_NO, MST_USER_MEMBER.PASSPORT_FILE_NAME, MST_USER_MEMBER.DT_REGN, MST_STATE.STATE_NAME, MST_COUNTRY.COUNTRY_NAME, MST_CITY.CITY_NAME FROM MST_STATE INNER JOIN MST_CITY ON MST_STATE.STATE_ID = MST_CITY.STATE_ID RIGHT OUTER JOIN MST_USER_MEMBER ON MST_CITY.CITY_ID = MST_USER_MEMBER.CITY_ID LEFT OUTER JOIN MST_COUNTRY ON MST_USER_MEMBER.COUNTRY_ID = MST_COUNTRY.COUNTRY_ID WHERE (MST_USER_MEMBER.LOGIN_ID = @LOGIN_ID)"
+        SelectCommand="SELECT MST_USER_MEMBER.MEMBER_ID, MST_USER_MEMBER.LOGIN_ID, MST_USER_MEMBER.MEM_NAME, MST_USER_MEMBER.MEM_GENDER, MST_USER_MEMBER.MEM_MOBILE, MST_USER_MEMBER.MEM_EMAIL, MST_USER_MEMBER.MEM_ADD1, MST_USER_MEMBER.MEM_ADD2, MST_USER_MEMBER.STATE_ID, MST_USER_MEMBER.PIN, MST_USER_MEMBER.PAN_NO, MST_USER_MEMBER.PAN_FILE_NAME, MST_USER_MEMBER.PASSPORT_NO, MST_USER_MEMBER.PASSPORT_FILE_NAME, MST_USER_MEMBER.DT_REGN, MST_STATE.STATE_NAME, MST_COUNTRY.COUNTRY_NAME, MST_CITY.CITY_NAME FROM MST_STATE INNER JOIN MST_CITY ON MST_STATE.STATE_ID = MST_CITY.STATE_ID RIGHT OUTER JOIN MST_USER_MEMBER ON MST_CITY.CITY_ID = MST_USER_MEMBER.CITY_ID LEFT OUTER JOIN MST_COUNTRY ON MST_USER_MEMBER.COUNTRY_ID = MST_COUNTRY.COUNTRY_ID WHERE (MST_USER_MEMBER.LOGIN_ID = @LOGIN_ID)"
         UpdateCommand="UPDATE [MST_USER_MEMBER] SET [LOGIN_ID] = @LOGIN_ID, [MEM_NAME] = @MEM_NAME, [MEM_GENDER] = @MEM_GENDER, [MEM_MOBILE] = @MEM_MOBILE, [MEM_EMAIL] = @MEM_EMAIL, [MEM_ADD1] = @MEM_ADD1, [MEM_ADD2] = @MEM_ADD2, [STATE_ID] = @STATE_ID, [CITY_ID] = @CITY_ID, [PIN] = @PIN, [PAN_NO] = @PAN_NO, [PAN_FILE_NAME] = @PAN_FILE_NAME, [PASSPORT_NO] = @PASSPORT_NO, [PASSPORT_FILE_NAME] = @PASSPORT_FILE_NAME, [COUNTRY_ID] = @COUNTRY_ID, [DT_REGN] = getdate() WHERE [MEMBER_ID] = @MEMBER_ID">
         <DeleteParameters>
             <asp:Parameter Name="MEMBER_ID" Type="Int32" />
@@ -110,85 +116,98 @@
             <asp:Parameter Name="MEMBER_ID" Type="Int32" />
         </UpdateParameters>
     </asp:SqlDataSource>
-     <asp:SqlDataSource ID="ds_Invoice" runat="server" ConnectionString="<%$ ConnectionStrings:FOREXConnectionString %>"
-       InsertCommand="InsertInvoice" InsertCommandType="StoredProcedure"
-      
-        SelectCommand="SELECT TOP (1000) [INVOICE_ID],
-         [INVOICE_SERIAL_NO]
-      ,[DT_INVOICE]
-      ,[BOOKING_NO]
-      ,[DT_BOOKING]
-      ,[BOOKING_FLAG]
-      ,[LOGIN_ID]
-      ,[CURR_CODE]
-      ,[FX_QTY]
-      ,[PROD_ID]
-      ,[AMT_ADVANCE]
-      ,[ONLINE_TRANS_ID]
-      ,[DT_ONLINE_TRANS]
-      ,[AMT_ONLINE]
-      ,[RATE_TO_CLIENT]
-      ,[CURRENT_RATE]
-      ,[COMM_COMPANY]
-      ,[COMM_DREAM]
-      ,[AMOUNT_TOTAL]
-      ,[AMOUNT_COMPANY]
-      ,[AMOUNT_DREAM]
-      ,[HSNID]
-  FROM [FOREX].[dbo].[INVOICE] ORDER BY [INVOICE_SERIAL_NO] DESC">
-      
-        <InsertParameters>
-            <asp:Parameter Name="INVOICE_SERIAL_NO" Type="Int32" />
-            <asp:Parameter Name="DT_INVOICE" Type="DateTime" />
-            <asp:Parameter Name="BOOKING_NO" Type="String" />
-            <asp:Parameter Name="BOOKING_FLAG" Type="String" />
-            <asp:Parameter Name="LOGIN_ID" Type="Int32" />
-            <asp:Parameter Name="PROCEED_TO" Type="String" />
-        </InsertParameters>
+    <asp:GridView ID="GridView2" runat="server" AutoGenerateColumns="False" CellPadding="4" DataKeyNames="MEMBER_ID" DataSourceID="dsUser2" ForeColor="#333333" OnSelectedIndexChanged="GridView2_SelectedIndexChanged">
+        <AlternatingRowStyle BackColor="White" ForeColor="#284775" />
+        <Columns>
+            <asp:TemplateField HeaderText="Invoice" ShowHeader="False">
+                <ItemTemplate>
+                    <asp:LinkButton ID="lbtnGenInv" class="btn btn-info " runat="server" CommandName="select"> <small>Invoice Details</small></asp:LinkButton>
+                </ItemTemplate>
+            </asp:TemplateField>
+             <asp:TemplateField HeaderText="Certificate Details" ShowHeader="False">
+                <ItemTemplate>
+                    <asp:LinkButton ID="lblCertificateInv" class="btn btn-info " runat="server" CommandName="select"> <small>Certificate Details</small></asp:LinkButton>
+                </ItemTemplate>
+            </asp:TemplateField>
+           <%-- <asp:CommandField ShowEditButton="True" />--%>
+            <asp:BoundField DataField="MEMBER_ID" HeaderText="MEMBER_ID" InsertVisible="False" ReadOnly="True" SortExpression="MEMBER_ID" Visible="False" />
+            <asp:BoundField DataField="LOGIN_ID" HeaderText="LOGIN_ID" SortExpression="LOGIN_ID" Visible="False" />
+            <asp:BoundField DataField="MEM_NAME" HeaderText="Name" SortExpression="MEM_NAME" />
+            <asp:BoundField DataField="MEM_GENDER" HeaderText="Gender" SortExpression="MEM_GENDER" />
+            <asp:TemplateField HeaderText="Contact" SortExpression="MEM_MOBILE">
+                <EditItemTemplate>
+                    <asp:TextBox ID="txtMEM_MOBILE" runat="server" Text='<%# Bind("MEM_MOBILE") %>'></asp:TextBox>
+                </EditItemTemplate>
+                <ItemTemplate>
+                    <asp:Label ID="lblMEM_MOBILE" runat="server" Text='<%# Bind("MEM_MOBILE") %>'></asp:Label>
+                    <br />
+                    <asp:Label ID="lblMEM_EMAIL" runat="server" Text='<%# Eval("MEM_EMAIL") %>'></asp:Label>
+                </ItemTemplate>
+            </asp:TemplateField>
+            <asp:BoundField DataField="MEM_EMAIL" HeaderText="MEM_EMAIL" SortExpression="MEM_EMAIL" Visible="False" />
+            <asp:TemplateField HeaderText="Address" SortExpression="MEM_ADD1">
+                <EditItemTemplate>
+                    <asp:TextBox ID="txtMEM_ADD1" runat="server" Text='<%# Bind("MEM_ADD1") %>'></asp:TextBox>
+                </EditItemTemplate>
+                <ItemTemplate>
+                    <asp:Label ID="lblMEMADD1" runat="server" Text='<%# Bind("MEM_ADD1") %>'></asp:Label>
+                    <br />
+                    <asp:Label ID="lblMEM_ADD2" runat="server" Text='<%# Eval("MEM_ADD2") %>'></asp:Label>
+                </ItemTemplate>
+            </asp:TemplateField>
+            <asp:BoundField DataField="MEM_ADD2" HeaderText="MEM_ADD2" SortExpression="MEM_ADD2" Visible="False" />
+            <asp:TemplateField HeaderText="City/State" SortExpression="STATE_ID">
+                <EditItemTemplate>
+                    <asp:TextBox ID="TextBox2" runat="server" Text='<%# Bind("STATE_ID") %>'></asp:TextBox>
+                </EditItemTemplate>
+                <ItemTemplate>
+                    <asp:Label ID="lblCITY_NAME" runat="server" Text='<%# Bind("CITY_NAME") %>'></asp:Label>
+                    <br />
+                    <asp:Label ID="lblSTATE_NAME" runat="server" Text='<%# Eval("STATE_NAME") %>'></asp:Label>
+                    &nbsp;-
+                    <asp:Label ID="lblPIN" runat="server" Text='<%# Eval("PIN") %>'></asp:Label>
+                    <br />
+                    <asp:Label ID="lblCOUNTRY_NAME" runat="server" Text='<%# Eval("COUNTRY_NAME") %>'></asp:Label>
+                </ItemTemplate>
+            </asp:TemplateField>
+            <asp:BoundField DataField="CITY_ID" HeaderText="CITY_ID" SortExpression="CITY_ID" Visible="False" />
+            <asp:BoundField DataField="PIN" HeaderText="PIN" SortExpression="PIN" Visible="False" />
+            <asp:BoundField DataField="PAN_NO" HeaderText="PAN No." SortExpression="PAN_NO" />
+            <asp:BoundField DataField="PAN_FILE_NAME" HeaderText="PAN_FILE_NAME" SortExpression="PAN_FILE_NAME" Visible="False" />
+            <asp:BoundField DataField="PASSPORT_NO" HeaderText="Passport No." SortExpression="PASSPORT_NO" />
+            <asp:BoundField DataField="PASSPORT_FILE_NAME" HeaderText="PASSPORT_FILE_NAME" SortExpression="PASSPORT_FILE_NAME" Visible="False" />
+            <asp:BoundField DataField="COUNTRY_ID" HeaderText="COUNTRY_ID" SortExpression="COUNTRY_ID" Visible="False" />
+            <asp:BoundField DataField="DT_REGN" HeaderText="DT_REGN" SortExpression="DT_REGN" Visible="False" />
+        </Columns>
+        <EditRowStyle BackColor="#999999" />
+        <EmptyDataTemplate>
+            <br />
+            <asp:Label ID="lblNoMemberFound" runat="server" Style="color: #CC0000" Text="No Member Found "></asp:Label>
+            <br />
+        </EmptyDataTemplate>
+        <FooterStyle BackColor="#5D7B9D" Font-Bold="True" ForeColor="White" />
+        <HeaderStyle BackColor="#5D7B9D" Font-Bold="True" ForeColor="White" />
+        <PagerStyle BackColor="#284775" ForeColor="White" HorizontalAlign="Center" />
+        <RowStyle BackColor="#F7F6F3" ForeColor="#333333" VerticalAlign="Top" />
+        <SelectedRowStyle BackColor="#E2DED6" Font-Bold="True" ForeColor="#333333" />
+        <SortedAscendingCellStyle BackColor="#E9E7E2" />
+        <SortedAscendingHeaderStyle BackColor="#506C8C" />
+        <SortedDescendingCellStyle BackColor="#FFFDF8" />
+        <SortedDescendingHeaderStyle BackColor="#6F8DAE" />
+    </asp:GridView>
+    <asp:SqlDataSource ID="dsCompany" runat="server" ConnectionString="<%$ ConnectionStrings:FOREXConnectionString %>"
+        SelectCommand="SELECT MST_COMPANY.*, MST_CITY.CITY_NAME, MST_STATE.STATE_NAME FROM MST_STATE INNER JOIN MST_CITY ON MST_STATE.STATE_ID = MST_CITY.STATE_ID RIGHT OUTER JOIN MST_COMPANY ON MST_CITY.CITY_ID = MST_COMPANY.CITY_ID"></asp:SqlDataSource>
+    <asp:SqlDataSource ID="dsMemberId" runat="server" ConnectionString="<%$ ConnectionStrings:FOREXConnectionString %>" SelectCommand="SELECT MST_USER_MEMBER.MEMBER_ID, MST_USER_MEMBER.LOGIN_ID, MST_USER_MEMBER.MEM_NAME, MST_USER_MEMBER.MEM_GENDER, MST_USER_MEMBER.MEM_MOBILE, MST_USER_MEMBER.MEM_EMAIL, MST_USER_MEMBER.MEM_ADD1, MST_USER_MEMBER.MEM_ADD2, MST_USER_MEMBER.STATE_ID, MST_USER_MEMBER.CITY_ID, MST_USER_MEMBER.PIN, MST_USER_MEMBER.PAN_NO, MST_USER_MEMBER.PAN_FILE_NAME, MST_USER_MEMBER.PASSPORT_NO, MST_USER_MEMBER.PASSPORT_FILE_NAME, MST_USER_MEMBER.COUNTRY_ID, MST_USER_MEMBER.DT_REGN, MST_CITY.CITY_NAME, MST_STATE.STATE_NAME, MST_COUNTRY.COUNTRY_NAME FROM MST_COUNTRY RIGHT OUTER JOIN MST_USER_MEMBER ON MST_COUNTRY.COUNTRY_ID = MST_USER_MEMBER.COUNTRY_ID LEFT OUTER JOIN MST_STATE INNER JOIN MST_CITY ON MST_STATE.STATE_ID = MST_CITY.STATE_ID ON MST_USER_MEMBER.CITY_ID = MST_CITY.CITY_ID WHERE (MST_USER_MEMBER.MEMBER_ID = @MEMBER_ID)">
         <SelectParameters>
-            <asp:SessionParameter Name="LOGIN_ID" SessionField="iLoginId" Type="Int32" />
-        </SelectParameters>
-       
-    </asp:SqlDataSource>
-            <asp:SqlDataSource ID="dsInvoiceVsBooking" runat="server" ConnectionString="<%$ ConnectionStrings:FOREXConnectionString %>" SelectCommand="SELECT TOP (1000) [INVOICE_ID],
-         [INVOICE_SERIAL_NO]
-      ,[DT_INVOICE]
-      ,[BOOKING_NO]
-      ,[DT_BOOKING]
-      ,[BOOKING_FLAG]
-      ,[LOGIN_ID]
-      ,[CURR_CODE]
-      ,[FX_QTY]
-      ,[PROD_ID]
-      ,[AMT_ADVANCE]
-      ,[ONLINE_TRANS_ID]
-      ,[DT_ONLINE_TRANS]
-      ,[AMT_ONLINE]
-      ,[RATE_TO_CLIENT]
-      ,[CURRENT_RATE]
-      ,[COMM_COMPANY]
-      ,[COMM_DREAM]
-      ,[AMOUNT_TOTAL]
-      ,[AMOUNT_COMPANY]
-      ,[AMOUNT_DREAM]
-      ,[HSNID]
-  FROM [FOREX].[dbo].[INVOICE]  WHERE LOGIN_ID = @LOGIN_ID AND BOOKING_NO=@BOOKING_NO ORDER BY [INVOICE_SERIAL_NO] DESC">
-        <SelectParameters>
-            <asp:SessionParameter Name="LOGIN_ID" SessionField="iLoginId" Type="Int32" />
-             <asp:SessionParameter Name="BOOKING_NO" SessionField="iBookingNo" Type="String" />
+            <asp:ControlParameter ControlID="GridView2" Name="MEMBER_ID" PropertyName="SelectedValue" Type="Int32" />
         </SelectParameters>
     </asp:SqlDataSource>
-     <div >
-         &nbsp;
-         &nbsp;
-         &nbsp;
-         &nbsp;
-         &nbsp;
-         &nbsp;
-         &nbsp;
-         &nbsp;
-        <asp:Panel ID="panelForm" runat="server"  >
-      <%--  <asp:Label ID="lblNewMemberName" runat="server" Text="New Member Details" Style="font-size: medium; color: #000066"></asp:Label>--%>
+    <br />
+    <asp:LinkButton ID="lbtnAddNewMember" class="btn btn-warning" Visible="false" runat="server" OnClick="lbtnAddNewMember_Click">Add New Member</asp:LinkButton>
+    <br />
+
+  <%--  <asp:Panel ID="panelForm" runat="server" Visible="False" >
+        <asp:Label ID="lblNewMemberName" runat="server" Text="New Member Details" Style="font-size: medium; color: #000066"></asp:Label>
         <div class="col-sm-4" style="background-color: antiquewhite;">
             <div class="form-group">
                 <label for="name">Name:</label>
@@ -280,28 +299,34 @@
                 <asp:FileUpload ID="fupPassport" runat="server" ClientIDMode="Static" />
                 <span id="spnDocMsgPP" class="error" style="display: none;"></span>
             </div>
-             <div class="form-group">
-                  <label for="Invoice">Invoice No. :</label>
-                  <asp:RequiredFieldValidator ID="rfvInvoiceSerialNumber" runat="server" ControlToValidate="txtInvoiceSerialNumber" Display="Dynamic" ErrorMessage="Please fill the Invoice Serial Number" ForeColor="Red" SetFocusOnError="True"></asp:RequiredFieldValidator>
-                <asp:TextBox ID="txtInvoiceSerialNumber" runat="server" class="form-control"></asp:TextBox>
-                <br />
-             </div>
-             <div class="form-group">
-            <asp:Label ID="Label1" runat="server" Text="Proceed To : "></asp:Label>
-                   <asp:DropDownList ID="ddlProceedTo" runat="server" AppendDataBoundItems="True" DataSourceID="dsCountry" DataTextField="COUNTRY_NAME" DataValueField="COUNTRY_ID">
-                        <asp:ListItem Text="Select Country" Value=""></asp:ListItem>
-                    </asp:DropDownList>
-                    <asp:RequiredFieldValidator ID="RequiredFieldValidator11" runat="server" ControlToValidate="ddlProceedTo" Display="Dynamic" ErrorMessage="Please Select Country" SetFocusOnError="True" ForeColor="Red"></asp:RequiredFieldValidator>
-              </div>
             <div>
                 <br />
-                <asp:Button ID="btnMember" runat="server" Text="Update Member Details & Generate Invoice" class="btn btn-primary" OnClick="btnMember_Click" />
+                <asp:Button ID="btnMember" runat="server" Text="Update Member Details" class="btn btn-primary" OnClick="btnMember_Click" />
+
                 <asp:Label ID="lblResult" runat="server" Style="font-size: medium"></asp:Label>
                 <br />
             </div>
         </div>
-    </asp:Panel>
-         <asp:Panel ID="panelPopup" runat="server"
+    </asp:Panel>--%>
+
+    <!-- Modal -->
+    <asp:LinkButton ID="lbtnDummy" runat="server"></asp:LinkButton>
+    <ajaxToolkit:ModalPopupExtender ID="ModalPopupExtender1" runat="server"
+        PopupControlID="panelPopup"
+        TargetControlID="lbtnDummy"
+        CancelControlID="btnClose"
+        BackgroundCssClass="modalBg"  >
+    </ajaxToolkit:ModalPopupExtender>
+    
+    <asp:SqlDataSource ID="dsBookingSell" runat="server" ConnectionString="<%$ ConnectionStrings:FOREXConnectionString %>"
+        SelectCommand="SELECT * FROM [TRN_SELL] SELL JOIN [TRN_SELL_SUB] SELL_SUB ON SELL.SELL_ID = SELL.SELL_ID WHERE ([BOOKING_NO] = @BOOKING_NO)">
+        <SelectParameters>
+            <asp:SessionParameter Name="BOOKING_NO" SessionField="iBookingNo" Type="String" />
+        </SelectParameters>
+    </asp:SqlDataSource>
+      <asp:SqlDataSource ID="dsHsn" runat="server" ConnectionString="<%$ ConnectionStrings:FOREXConnectionString %>" SelectCommand="SELECT * FROM [HSN]"></asp:SqlDataSource>
+    
+    <asp:Panel ID="panelPopup" runat="server"
         Style="background-color: #F9F9F9; padding: 15px"  Width="1000px" CssClass="popup" Height="800px" ScrollBars="Vertical" >
       <%--  <div class="invHeader">
             <asp:Label ID="mLblResult" runat="server" Text="" Style="font-size: large"></asp:Label>
@@ -595,20 +620,8 @@
                 <td align="left">
                     <asp:Label ID="Label19" runat="server" Text="Address : " CssClass="disp"></asp:Label>
                 </td>
-                <td  align="left">
+                <td colspan="4" align="left">
                     <asp:Label ID="lblPartyAddress" runat="server" Text="Party Address 1 & 2" 
-                        CssClass="disp" Font-Bold="True"></asp:Label>
-                </td>
-                <td  align="left">
-                    <asp:Label ID="Label2" runat="server" Text="" 
-                        CssClass="disp" Font-Bold="True"></asp:Label>
-                </td>
-                <td  align="left">
-                    <asp:Label ID="Label12" runat="server" Text="Proceed To :" 
-                        CssClass="disp" ></asp:Label>
-                </td>
-                <td  align="left">
-                    <asp:Label ID="lblProceedToReport" runat="server" Text="" 
                         CssClass="disp" Font-Bold="True"></asp:Label>
                 </td>
             </tr>
@@ -620,13 +633,13 @@
                     <asp:Label ID="lblPartyMobile" runat="server" CssClass="disp" Font-Bold="True"></asp:Label>
                 </td>
                 <td align="left">
-                    <asp:Label ID="Label11" runat="server" Text=" " CssClass="disp"></asp:Label>
+                    <asp:Label ID="Label11" runat="server" Text="State : " CssClass="disp"></asp:Label>
                 </td>
                 <td align="left">
-                    <asp:Label ID="lblState" runat="server" Text="State : "  CssClass="disp"></asp:Label>
+                    <asp:Label ID="lblPartyState" runat="server" CssClass="disp" Font-Bold="True"></asp:Label>
                 </td>
                 <td align="left">
-                    <asp:Label ID="lblPartyState" runat="server" Text="" CssClass="disp" Font-Bold="True"></asp:Label>
+                    <asp:Label ID="lblStateCode" runat="server" Text="" CssClass="disp"></asp:Label>
                 </td>
             </tr>
             <tr>
@@ -883,7 +896,7 @@
             </tr>
             <tr>
                 <td  align="left">
-                   <asp:Button ID="btnClose" Class="btn btn-danger" runat="server" OnClick="btnCancel_Click" Text="Close" />
+                   <asp:Button ID="btnClose" Class="btn btn-danger" runat="server" Text="Close" />
                 </td>
                 <td align="left">
                     &nbsp;
@@ -926,5 +939,4 @@
             <br />
         </div>
     </asp:Panel>
-     </div>
 </asp:Content>

@@ -120,12 +120,52 @@ namespace DreamForex
 
             }
          }
-        protected void OnRowEditing(object sender, GridViewEditEventArgs e)
+
+        protected void gvSell_RowUpdating(object sender, GridViewUpdateEventArgs e)
+        {
+            Label lblAMOUNT_TOTAL_INVOICE = (Label)gvSell.Rows[e.RowIndex].FindControl("lblAMOUNT_TOTAL_INVOICE");
+            Label lblAMOUNT_TOTAL = (Label)gvSell.Rows[e.RowIndex].FindControl("lblAMOUNT_TOTAL");
+            Label lblAMOUNT_COMPANY_INVOICE = (Label)gvSell.Rows[e.RowIndex].FindControl("lblAMOUNT_COMPANY_INVOICE");
+            TextBox txtRTCInvoice = (TextBox)gvSell.Rows[e.RowIndex].FindControl("txtRTCInvoice");
+            Label lblBUY_SUB_ID = (Label)gvSell.Rows[e.RowIndex].FindControl("lblBUY_SUB_ID");
+            Label lblFX_QTY = (Label)gvSell.Rows[e.RowIndex].FindControl("lblFX_QTY");
+            Label grdLblAMOUNT_DREAM = (Label)gvSell.Rows[e.RowIndex].FindControl("grdLblAMOUNT_DREAM");
+
+
+            dsSell.UpdateParameters["RATE_TO_CLIENT_INVOICE"].DefaultValue = txtRTCInvoice.Text;
+            var totalAmountInvoice = double.Parse(txtRTCInvoice.Text) * double.Parse(lblFX_QTY.Text);
+            var totalCommissionInvoice = double.Parse(lblAMOUNT_TOTAL.Text) - (totalAmountInvoice - double.Parse(grdLblAMOUNT_DREAM.Text));
+            dsSell.UpdateParameters["AMOUNT_TOTAL_INVOICE"].DefaultValue = totalAmountInvoice.ToString();
+            dsSell.UpdateParameters["AMOUNT_COMPANY_INVOICE"].DefaultValue = totalCommissionInvoice.ToString();
+            dsSell.UpdateParameters["BUY_SUB_ID"].DefaultValue = lblBUY_SUB_ID.Text;
+
+            try
+            {
+                var response = dsSell.Update();
+                var select = dsSell.Select(DataSourceSelectArguments.Empty);
+                dsSell.DataBind();
+                gvSell.DataBind();
+            }
+            catch
+            {
+
+            }
+        }
+
+
+        protected void OnBuyRowEditing(object sender, GridViewEditEventArgs e)
         {
             gvBuy.EditIndex = e.NewEditIndex;
             gvBuy.DataBind();
         }
-        protected void OnUpdate(object sender, EventArgs e)
+
+        protected void OnSellRowEditing(object sender, GridViewEditEventArgs e)
+        {
+            gvSell.EditIndex = e.NewEditIndex;
+            gvSell.DataBind();
+        }
+
+        protected void OnUpdateBuy(object sender, EventArgs e)
         {
             GridViewRow row = (sender as LinkButton).NamingContainer as GridViewRow;
             
@@ -160,11 +200,53 @@ namespace DreamForex
             gvBuy.DataBind();
         }
 
-        protected void OnCancel(object sender, EventArgs e)
+        protected void OnUpdateSell(object sender, EventArgs e)
+        {
+            GridViewRow row = (sender as LinkButton).NamingContainer as GridViewRow;
+
+            Label lblAMOUNT_TOTAL_INVOICE = (Label)gvSell.Rows[row.RowIndex].FindControl("lblAMOUNT_TOTAL_INVOICE");
+            Label lblAMOUNT_TOTAL = (Label)gvSell.Rows[row.RowIndex].FindControl("lblAMOUNT_TOTAL");
+            Label lblAMOUNT_COMPANY_INVOICE = (Label)gvSell.Rows[row.RowIndex].FindControl("lblAMOUNT_COMPANY_INVOICE");
+            TextBox txtRTCInvoice = (TextBox)gvSell.Rows[row.RowIndex].FindControl("txtRTCInvoice");
+            Label lblSELL_SUB_ID = (Label)gvSell.Rows[row.RowIndex].FindControl("lblSELL_SUB_ID");
+            Label lblFX_QTY = (Label)gvSell.Rows[row.RowIndex].FindControl("lblFX_QTY");
+            Label grdLblAMOUNT_DREAM = (Label)gvSell.Rows[row.RowIndex].FindControl("grdLblAMOUNT_DREAM");
+
+
+            dsSell.UpdateParameters["RATE_TO_CLIENT_INVOICE"].DefaultValue = txtRTCInvoice.Text;
+            var totalAmountInvoice = double.Parse(txtRTCInvoice.Text) * double.Parse(lblFX_QTY.Text);
+            var totalCommissionInvoice = double.Parse(lblAMOUNT_TOTAL.Text) - (totalAmountInvoice - double.Parse(grdLblAMOUNT_DREAM.Text));
+            dsSell.UpdateParameters["AMOUNT_TOTAL_INVOICE"].DefaultValue = totalAmountInvoice.ToString();
+            dsSell.UpdateParameters["AMOUNT_COMPANY_INVOICE"].DefaultValue = totalCommissionInvoice.ToString();
+            dsSell.UpdateParameters["SELL_SUB_ID"].DefaultValue = lblSELL_SUB_ID.Text;
+
+            try
+            {
+                var response = dsSell.Update();
+                var select = dsSell.Select(DataSourceSelectArguments.Empty);
+                dsSell.DataBind();
+                gvSell.DataBind();
+            }
+            catch
+            {
+
+            }
+            gvSell.EditIndex = -1;
+            gvSell.DataBind();
+        }
+
+        protected void OnCancelBuy(object sender, EventArgs e)
         {
             gvBuy.EditIndex = -1;
             gvBuy.DataBind();
         }
+
+        protected void OnCancelSell(object sender, EventArgs e)
+        {
+            gvSell.EditIndex = -1;
+            gvSell.DataBind();
+        }
+
 
         protected void DropDownList1_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -215,6 +297,14 @@ namespace DreamForex
             Response.Redirect("Invoice-Pre.aspx");
         }
 
+        protected void lbtnSellLoginId_Click(object sender, EventArgs e)
+        {
+            LinkButton btn = (LinkButton)(sender);
+            Session["iLoginId"] = btn.CommandArgument;
+            Session["iBookingNo"] = btn.Text;
+            Response.Redirect("InvoiceSell_Pre.aspx");
+        }
+
         protected void lnkGrdBuy_Command(object sender, CommandEventArgs e)
         {
 
@@ -228,12 +318,28 @@ namespace DreamForex
                 int index= e.Row.RowIndex;
                 
                 Label lblInvoice = e.Row.FindControl("lblINVOICE_ID") as Label;
-                LinkButton editBtn = (LinkButton)e.Row.FindControl("lnkBtnEdit");
+                LinkButton editBtn = (LinkButton)e.Row.FindControl("lnkBtnEditBuy");
                 if (lblInvoice.Text != "")
                 {
                     editBtn.Visible = false;
                 }
                
+            }
+        }
+
+        protected void gvSell_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            //Checking the RowType of the Row  
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                int index = e.Row.RowIndex;
+
+                Label lblInvoice = e.Row.FindControl("lblINVOICE_ID") as Label;
+                LinkButton editBtn = (LinkButton)e.Row.FindControl("lnkBtnEditSell");
+                if (lblInvoice.Text != "")
+                {
+                    editBtn.Visible = false;
+                }
             }
         }
     }
