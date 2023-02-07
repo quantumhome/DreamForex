@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="InvoiceDetails.aspx.cs" MasterPageFile="~/SiteAdmin.Master" Inherits="DreamForex.InvoiceDetails" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="InvoiceSellDetails.aspx.cs" MasterPageFile="~/SiteAdmin.Master" Inherits="DreamForex.InvoiceSellDetails" %>
 
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
 
@@ -27,7 +27,7 @@
         <asp:Label ID="lblUserDet" runat="server" Text=""></asp:Label>
     </div>
      <div>
-        <asp:Button ID="Button1" class="btn btn-basic" runat="server" Text="<< Back" PostBackUrl="~/Invoice-Pre.aspx" />
+        <asp:Button ID="Button1" class="btn btn-basic" runat="server" Text="<< Back" PostBackUrl="~/InvoiceSell_Pre.aspx" />
     </div>
      <asp:SqlDataSource ID="dsUser1" runat="server" ConnectionString="<%$ ConnectionStrings:FOREXConnectionString %>"
         SelectCommand="SELECT [MEM_NAME], [MOBILENO], [EMAILID] FROM [MST_USER] WHERE ([LOGIN_ID] = @LOGIN_ID)">
@@ -55,8 +55,8 @@
         BackgroundCssClass="modalBg"  >
     </ajaxToolkit:ModalPopupExtender>
     
-    <asp:SqlDataSource ID="dsBookingBuy" runat="server" ConnectionString="<%$ ConnectionStrings:FOREXConnectionString %>"
-        SelectCommand="SELECT * FROM [TRN_BUY] BUY JOIN [TRN_BUY_SUB] BUY_SUB ON BUY.BUY_ID = BUY_SUB.BUY_ID WHERE ([BOOKING_NO] = @BOOKING_NO)">
+    <asp:SqlDataSource ID="dsBookingSell" runat="server" ConnectionString="<%$ ConnectionStrings:FOREXConnectionString %>"
+        SelectCommand="SELECT * FROM [TRN_SELL] SELL JOIN [TRN_SELL_SUB] SELL_SUB ON SELL.SELL_ID = SELL.SELL_ID WHERE ([BOOKING_NO] = @BOOKING_NO)">
         <SelectParameters>
             <asp:SessionParameter Name="BOOKING_NO" SessionField="iBookingNo" Type="String" />
         </SelectParameters>

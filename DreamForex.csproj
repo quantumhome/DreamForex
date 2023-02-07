@@ -137,6 +137,8 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="InvoiceSell_Pre.aspx" />
+    <Content Include="InvoiceSellDetails.aspx" />
     <Content Include="InvoiceDetails.aspx" />
     <Content Include="packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll" />
     <Content Include="packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.pdb" />
@@ -506,12 +508,26 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="InvoiceSell_Pre.aspx.cs">
+      <DependentUpon>InvoiceSell_Pre.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="InvoiceSell_Pre.aspx.designer.cs">
+      <DependentUpon>InvoiceSell_Pre.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Invoice-Pre.aspx.cs">
       <DependentUpon>Invoice-Pre.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Invoice-Pre.aspx.designer.cs">
       <DependentUpon>Invoice-Pre.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="InvoiceSellDetails.aspx.cs">
+      <DependentUpon>InvoiceSellDetails.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="InvoiceSellDetails.aspx.designer.cs">
+      <DependentUpon>InvoiceSellDetails.aspx</DependentUpon>
     </Compile>
     <Compile Include="InvoiceDetails.aspx.cs">
       <DependentUpon>InvoiceDetails.aspx</DependentUpon>

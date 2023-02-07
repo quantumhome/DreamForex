@@ -12,7 +12,7 @@ using System.Web.UI.WebControls;
 
 namespace DreamForex
 {
-    public partial class InvoiceDetails : System.Web.UI.Page
+    public partial class InvoiceSellDetails : System.Web.UI.Page
     {
         string constring = ConfigurationManager.ConnectionStrings["FOREXConnectionString"].ConnectionString;
         protected void Page_Load(object sender, EventArgs e)
@@ -87,7 +87,7 @@ namespace DreamForex
                     txtInvoiceSerialNumber.Text = "1";
                 }
 
-                DataView dsBookingBuyDetails = (DataView)(dsBookingBuy.Select(DataSourceSelectArguments.Empty));
+                DataView dsBookingBuyDetails = (DataView)(dsBookingSell.Select(DataSourceSelectArguments.Empty));
                 if (dsBookingBuyDetails != null && dsBookingBuyDetails.Table.Rows.Count > 0)
                 {
                     if (dsBookingBuyDetails.Table.Rows[0]["ProceedTo"].ToString() != "")
@@ -246,7 +246,7 @@ namespace DreamForex
                     //iTxtPan.Text = dv1.Table.Rows[0]["PAN_NO"].ToString();
 
                     //Select data from book table
-                    DataView dv2 = (DataView)(dsBookingBuy.Select(DataSourceSelectArguments.Empty));
+                    DataView dv2 = (DataView)(dsBookingSell.Select(DataSourceSelectArguments.Empty));
                     if (dv2.Count > 0)
                     {
                         lblCurr.Text = dv2.Table.Rows[0]["CURR_CODE"].ToString();
@@ -422,144 +422,14 @@ namespace DreamForex
             {
                 // mLblResult.Text = "Please fill up Company Details";
             }
-            //DataView dv_Invoice = (DataView)ds_Invoice.Select(DataSourceSelectArguments.Empty);
-            //if(dv_Invoice!=null)
-            //{
-                lblInvoiceNo.Text = txtInvoiceSerialNumber.Text;
-            //}
             
-            //DataView dv = (DataView)dsCompany.Select(DataSourceSelectArguments.Empty);
-            //if (dv.Count > 0)
-            //{
-            //    lblGstin.Text = "GSTIN : " + dv.Table.Rows[0]["GSTIN"].ToString();
-            //    lblRbi.Text = dv.Table.Rows[0]["RBI_LIC_NO"].ToString();
-            //    lblCin.Text = "CIN : " + dv.Table.Rows[0]["CIN"].ToString();
-            //    lblCompanyname.Text = dv.Table.Rows[0]["COMP_NAME"].ToString();
-            //    lblAdd1.Text = dv.Table.Rows[0]["COMP_ADDRESS_1"].ToString();
-            //    lblAdd2.Text = dv.Table.Rows[0]["COMP_ADDRESS_2"].ToString();
-            //    lblStCity.Text = dv.Table.Rows[0]["CITY_NAME"].ToString();
-            //    lblCoState.Text = dv.Table.Rows[0]["STATE_NAME"].ToString();
-            //    lblPin.Text = dv.Table.Rows[0]["PIN"].ToString();
-            //    lblPhno.Text = "Phone No. : " + dv.Table.Rows[0]["PHONE"].ToString();
-            //    lblEmail.Text = "eMail : " + dv.Table.Rows[0]["EMAIL"].ToString();
-            //    txtInvDt.Text = DateTime.Now.Date.ToString("dd-MMM-yyyy");
-
-            //    //Selected Member Details
-            //    DataView dv1 = (DataView)dsMemberId.Select(DataSourceSelectArguments.Empty);
-            //    if (dv1.Count > 0)
-            //    {
-            //        iTxtname.Text = dv1.Table.Rows[0]["MEM_NAME"].ToString();
-            //        iTxtAdd1.Text = dv1.Table.Rows[0]["MEM_ADD1"].ToString();
-            //        iTxtAdd2.Text = dv1.Table.Rows[0]["MEM_ADD2"].ToString();
-            //        iTxtMobile.Text = dv1.Table.Rows[0]["MEM_MOBILE"].ToString();
-            //        iTxtEmail.Text = dv1.Table.Rows[0]["MEM_EMAIL"].ToString();
-            //        iLblCity.Text = dv1.Table.Rows[0]["CITY_NAME"].ToString();
-            //        iLblState.Text = dv1.Table.Rows[0]["STATE_NAME"].ToString();
-            //        iTxtPin.Text = dv1.Table.Rows[0]["PIN"].ToString();
-            //        //iTxtGstinUin.Text = dv1.Table.Rows[0]["MEM_EMAIL"].ToString();
-            //        lblCountry.Text = dv1.Table.Rows[0]["COUNTRY_NAME"].ToString();
-            //        //iTxtProceedTo.Text = "";
-            //        iTxtPP.Text = dv1.Table.Rows[0]["PASSPORT_NO"].ToString();
-            //        iTxtPan.Text = dv1.Table.Rows[0]["PAN_NO"].ToString();
-
-            //        //Select data from book table
-            //        DataView dv2 = (DataView)(dsBookingBuy.Select(DataSourceSelectArguments.Empty));
-            //        if (dv2.Count > 0)
-            //        {
-            //            iTxtCurrcode.Text = dv2.Table.Rows[0]["CURR_CODE"].ToString();
-            //            iTxtFxAmt.Text = dv2.Table.Rows[0]["FX_QTY"].ToString();
-            //            iTxtRate.Text = dv2.Table.Rows[0]["RATE_TO_CLIENT"].ToString();
-            //            double compRate = Convert.ToDouble(dv2.Table.Rows[0]["COMM_COMPANY"].ToString());
-            //            double dreamRate = Convert.ToDouble(dv2.Table.Rows[0]["COMM_DREAM"].ToString());
-            //        }
-
-            //        DataView dv3 = (DataView)dsHsn.Select(DataSourceSelectArguments.Empty);
-            //        if (dv3.Count > 0)
-            //        {
-            //            iLblHsn.Text = dv3.Table.Rows[0]["HSNCODE"].ToString();
-
-            //            iLblCgst.Text = "CGST : @ " + dv3.Table.Rows[0]["CGST"].ToString() + " %";
-            //            iLblSgst.Text = "SGST : @ " + dv3.Table.Rows[0]["SGST"].ToString() + " %";
-            //            iLblIgst.Text = "IGST : @ " + dv3.Table.Rows[0]["IGST"].ToString() + " %";
-
-            //            int iCgstrate = Convert.ToInt32(dv3.Table.Rows[0]["CGST"].ToString());
-            //            int iSgstrate = Convert.ToInt32(dv3.Table.Rows[0]["SGST"].ToString());
-            //            int iIgstrate = Convert.ToInt32(dv3.Table.Rows[0]["IGST"].ToString());
-
-            //            double iCgstAmt = 0, iSgstAmt = 0, iIgstAmt = 0;
-
-            //            double wRs = Math.Round(Convert.ToDouble(iTxtFxAmt.Text) * Convert.ToDouble(iTxtRate.Text));
-            //            iLblValue.Text = wRs.ToString();
-
-            //            //GST Calculation
-
-            //            if (lblCoState.Text == iLblState.Text) // CGST, SGST
-            //            {
-            //                if (wRs <= 25000)
-            //                {
-            //                    iCgstAmt = 45;
-            //                    iSgstAmt = iCgstAmt;
-            //                }
-            //                if (wRs > 25000 && wRs <= 100000)
-            //                {
-            //                    iCgstAmt = Math.Round((wRs * iCgstrate) / 100);
-            //                    iSgstAmt = iCgstAmt;
-            //                }
-            //                if (wRs > 100000 && wRs <= 1000000)
-            //                {
-            //                    iCgstAmt = 180 + Math.Round(((wRs - 100000) * iCgstrate) / 100);
-            //                    iSgstAmt = iCgstAmt;
-            //                }
-            //                if (wRs > 1000000)
-            //                {
-            //                    iCgstAmt = 990 + Math.Round(((wRs - 1000000) * iCgstrate) / 100);
-            //                    iSgstAmt = iCgstAmt;
-            //                }
-            //            }
-            //            else // IGST
-            //            {
-            //                if (wRs <= 25000)
-            //                {
-            //                    iIgstAmt = 45;
-            //                }
-            //                if (wRs > 25000 && wRs <= 100000)
-            //                {
-            //                    iIgstAmt = Math.Round((wRs * iIgstrate) / 100);
-            //                }
-            //                if (wRs > 100000 && wRs <= 1000000)
-            //                {
-            //                    iIgstAmt = 180 + Math.Round(((wRs - 100000) * iIgstrate) / 100);
-            //                }
-            //                if (wRs > 1000000)
-            //                {
-            //                    iIgstAmt = 990 + Math.Round(((wRs - 1000000) * iIgstrate) / 100);
-            //                }
-            //            }
-
-            //            //****************
-
-            //            //double iCgstAmt = (wRs * iCgst) / 100;
-            //            //double iSgstAmt =  (wRs *  iSgst )/ 100;
-            //            //double iIgstAmt = (wRs * iIgst )/ 100;
-
-            //            iTxtCgst.Text = iCgstAmt.ToString();
-            //            iTxtSgst.Text = iSgstAmt.ToString();
-            //            iTxtIgst.Text = iIgstAmt.ToString();
-            //            iTxtTotal.Text = (wRs + iCgstAmt + iSgstAmt + iIgstAmt).ToString();
-            //            //*-*-*-*-*-*-*-*-*-*
-            //        }
-            //        // *-*-*-*-*-*-*-*-*-*-*-*-*
-            //    }
-            //}
-            //else
-            //{
-            //    mLblResult.Text = "Please fill up Company Details";
+                lblInvoiceNo.Text = txtInvoiceSerialNumber.Text;
             //}
         }
 
         protected void btnCancel_Click(object sender, EventArgs e)
         {
-            Response.Redirect("~/Invoice-Pre.aspx");
+            Response.Redirect("~/InvoiceSell_Pre.aspx");
         }
     }
 }
