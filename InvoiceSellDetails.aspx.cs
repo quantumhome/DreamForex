@@ -1,9 +1,11 @@
-﻿using Humanizer;
+﻿using AjaxControlToolkit;
+using Humanizer;
 using Microsoft.Ajax.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -72,7 +74,7 @@ namespace DreamForex
                 {
                     txtInvoiceSerialNumber.Text = dvInvoiceVsBooking.Table.Rows[0]["INVOICE_SERIAL_NO"].ToString();
                   
-                    GenerateInvoice();
+                    GenerateInvoice(true);
                     ModalPopupExtender1.Show();
                     btnMember.Enabled = false;
                 }
@@ -192,13 +194,13 @@ namespace DreamForex
             {
                 lblResult.Text = "Sorry, could not Save.. Try again later..<br />" + ex.ToString();
             }
-            SaveInvoiceDetails();
-            GenerateInvoice();
+          
+            GenerateInvoice(false);
             btnMember.Enabled = false;
             ModalPopupExtender1.Show();
         }
 
-        private void SaveInvoiceDetails()
+        private void SaveInvoiceDetails(string totalamount, string cgst, string sgst, string igst, string hsnId)
         {
             ds_Invoice.InsertParameters["INVOICE_SERIAL_NO"].DefaultValue = txtInvoiceSerialNumber.Text;
             ds_Invoice.InsertParameters["DT_INVOICE"].DefaultValue = DateTime.Now.ToString();
@@ -206,10 +208,15 @@ namespace DreamForex
             ds_Invoice.InsertParameters["BOOKING_FLAG"].DefaultValue = "T";
             ds_Invoice.InsertParameters["LOGIN_ID"].DefaultValue = Session["iLoginId"].ToString();
             ds_Invoice.InsertParameters["PROCEED_TO"].DefaultValue = ddlProceedTo.SelectedItem.Text;
+            ds_Invoice.InsertParameters["AMOUNT_TOTAL"].DefaultValue = totalamount;
+            ds_Invoice.InsertParameters["CGST"].DefaultValue = cgst;
+            ds_Invoice.InsertParameters["SGST"].DefaultValue = sgst;
+            ds_Invoice.InsertParameters["IGST"].DefaultValue = igst;
+            ds_Invoice.InsertParameters["HSNID"].DefaultValue = hsnId;
             var response = ds_Invoice.Insert();
         }
 
-        public void GenerateInvoice()
+        public void GenerateInvoice(bool isAlreadyGenerated)
         {
             DataView dv = (DataView)dsCompany.Select(DataSourceSelectArguments.Empty);
             if (dv.Count > 0)
@@ -262,16 +269,28 @@ namespace DreamForex
                             currencyTable.Rows.Add(tRow);
                             tRow.ID = "tr" + i;
 
-                            tRow.Controls.Add(new HtmlTableCell() { ID = "CellCurrent" + i, Align = "Center" });
+                            tRow.Controls.Add(new HtmlTableCell() { ID = "CellCurrent" + i, Align = "Center"  });
                             tRow.Controls.Add(new HtmlTableCell() { ID = "CellHSN" + i, Align = "Center" });
                             tRow.Controls.Add(new HtmlTableCell() { ID = "CellFXNo" + i, Align = "Center" });
                             tRow.Controls.Add(new HtmlTableCell() { ID = "CellRate" + i, Align = "Center" });
                             tRow.Controls.Add(new HtmlTableCell() { ID = "CellAmount" + i, Align = "Center" });
-                            tRow.Cells[0].Controls.Add(new Label() { CssClass = "disp", Text = dv2.Table.Rows[i]["CURR_CODE"].ToString() });
+                            Label lblCURE_CODE = new Label() { ID = "CURE_CODE_" + i, Text = dv2.Table.Rows[i]["CURR_CODE"].ToString() };
+                            lblCURE_CODE.CssClass = "disp";
+                            tRow.Cells[0].Controls.Add(lblCURE_CODE);
                             //tRow.Cells[1].Controls.Add(new Label() { CssClass = "disp" , Text = dv2.Table.Rows[i]["FX_QTY"].ToString()});
-                            tRow.Cells[2].Controls.Add(new Label() { CssClass = "disp", Text = dv2.Table.Rows[i]["FX_QTY"].ToString() });
-                            tRow.Cells[3].Controls.Add(new Label() { CssClass = "disp", Text = dv2.Table.Rows[i]["RATE_TO_CLIENT"].ToString() });
-                            tRow.Cells[4].Controls.Add(new Label() { ID = "LblAmount" + i, CssClass = "disp", Text = dv2.Table.Rows[i]["AMOUNT_TOTAL"].ToString() });
+                            //Label currentCode = (Label)("CURE_CODE_" + i); 
+                            Label lblFX_QTY = new Label() { ID = "FX_QTY_" + i,  Text = dv2.Table.Rows[i]["FX_QTY"].ToString() };
+                            CssClassPropertyAttribute cssClassPropertyAttribute = new CssClassPropertyAttribute();
+                         
+                            lblFX_QTY.CssClass = "disp";
+                            tRow.Cells[2].Controls.Add(lblFX_QTY);
+                           
+                            Label lblRATE_TO_CLIENT = new Label() { ID = "RATE_TO_CLIENT_" + i,  Text = dv2.Table.Rows[i]["RATE_TO_CLIENT"].ToString() };
+                            lblRATE_TO_CLIENT.CssClass = "disp";
+                            tRow.Cells[3].Controls.Add(lblRATE_TO_CLIENT);
+                            Label LblAmount = new Label() { ID = "LblAmount" + i,  Text = dv2.Table.Rows[i]["AMOUNT_TOTAL"].ToString() };
+                            LblAmount.CssClass = "disp";
+                            tRow.Cells[4].Controls.Add(LblAmount);
                         }
 
                         if (dv2.Count < 10)
@@ -412,7 +431,11 @@ namespace DreamForex
                         lblAmtSGST.Text = iSgstAmt.ToString();
                         lblAmtIGST.Text = iIgstAmt.ToString();
                         lblAmtTotal.Text = (wRs + iCgstAmt + iSgstAmt + iIgstAmt).ToString();
-                        lblAmtWords.Text = Convert.ToInt32(wRs).ToWords();
+                        lblAmtWords.Text = Convert.ToInt32(lblAmtTotal.Text).ToWords();
+                        if (!isAlreadyGenerated)
+                        {
+                           SaveInvoiceDetails(lblAmtTotal.Text, lblAmtCGST.Text, lblAmtSGST.Text, lblAmtIGST.Text, lblHSN.Text);
+                        }
                         //*-*-*-*-*-*-*-*-*-*
                     }
                     // *-*-*-*-*-*-*-*-*-*-*-*-*
@@ -422,8 +445,9 @@ namespace DreamForex
             {
                 // mLblResult.Text = "Please fill up Company Details";
             }
-            
+                
                 lblInvoiceNo.Text = txtInvoiceSerialNumber.Text;
+               
             //}
         }
 
