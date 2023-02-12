@@ -56,7 +56,7 @@
     </ajaxToolkit:ModalPopupExtender>
     
     <asp:SqlDataSource ID="dsBookingSell" runat="server" ConnectionString="<%$ ConnectionStrings:FOREXConnectionString %>"
-        SelectCommand="SELECT * FROM [TRN_SELL] SELL JOIN [TRN_SELL_SUB] SELL_SUB ON SELL.SELL_ID = SELL.SELL_ID WHERE ([BOOKING_NO] = @BOOKING_NO)">
+        SelectCommand="SELECT * FROM [TRN_SELL] SELL JOIN [TRN_SELL_SUB] SELL_SUB ON SELL.SELL_ID = SELL_SUB.SELL_ID WHERE ([BOOKING_NO] = @BOOKING_NO)">
         <SelectParameters>
             <asp:SessionParameter Name="BOOKING_NO" SessionField="iBookingNo" Type="String" />
         </SelectParameters>
@@ -120,20 +120,10 @@
       ,[DT_BOOKING]
       ,[BOOKING_FLAG]
       ,[LOGIN_ID]
-      ,[CURR_CODE]
-      ,[FX_QTY]
-      ,[PROD_ID]
-      ,[AMT_ADVANCE]
-      ,[ONLINE_TRANS_ID]
-      ,[DT_ONLINE_TRANS]
-      ,[AMT_ONLINE]
-      ,[RATE_TO_CLIENT]
-      ,[CURRENT_RATE]
-      ,[COMM_COMPANY]
-      ,[COMM_DREAM]
       ,[AMOUNT_TOTAL]
-      ,[AMOUNT_COMPANY]
-      ,[AMOUNT_DREAM]
+      ,[CGST]
+      ,[SGST]
+      ,[IGST]
       ,[HSNID]
   FROM [FOREX].[dbo].[INVOICE] ORDER BY [INVOICE_SERIAL_NO] DESC">
       
@@ -144,6 +134,11 @@
             <asp:Parameter Name="BOOKING_FLAG" Type="String" />
             <asp:Parameter Name="LOGIN_ID" Type="Int32" />
             <asp:Parameter Name="PROCEED_TO" Type="String" />
+            <asp:Parameter Name="AMOUNT_TOTAL" Type="Double" />
+            <asp:Parameter Name="CGST" Type="Double" />
+            <asp:Parameter Name="SGST" Type="Double" />
+            <asp:Parameter Name="IGST" Type="Double" />
+            <asp:Parameter Name="HSNID" Type="Int32" />
         </InsertParameters>
         <SelectParameters>
             <asp:SessionParameter Name="LOGIN_ID" SessionField="iLoginId" Type="Int32" />
@@ -151,26 +146,16 @@
        
     </asp:SqlDataSource>
             <asp:SqlDataSource ID="dsInvoiceVsBooking" runat="server" ConnectionString="<%$ ConnectionStrings:FOREXConnectionString %>" SelectCommand="SELECT TOP (1000) [INVOICE_ID],
-         [INVOICE_SERIAL_NO]
+       [INVOICE_SERIAL_NO]
       ,[DT_INVOICE]
       ,[BOOKING_NO]
       ,[DT_BOOKING]
       ,[BOOKING_FLAG]
       ,[LOGIN_ID]
-      ,[CURR_CODE]
-      ,[FX_QTY]
-      ,[PROD_ID]
-      ,[AMT_ADVANCE]
-      ,[ONLINE_TRANS_ID]
-      ,[DT_ONLINE_TRANS]
-      ,[AMT_ONLINE]
-      ,[RATE_TO_CLIENT]
-      ,[CURRENT_RATE]
-      ,[COMM_COMPANY]
-      ,[COMM_DREAM]
       ,[AMOUNT_TOTAL]
-      ,[AMOUNT_COMPANY]
-      ,[AMOUNT_DREAM]
+      ,[CGST]
+      ,[SGST]
+      ,[IGST]
       ,[HSNID]
   FROM [FOREX].[dbo].[INVOICE]  WHERE LOGIN_ID = @LOGIN_ID AND BOOKING_NO=@BOOKING_NO ORDER BY [INVOICE_SERIAL_NO] DESC">
         <SelectParameters>

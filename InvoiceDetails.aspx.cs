@@ -72,7 +72,7 @@ namespace DreamForex
                 {
                     txtInvoiceSerialNumber.Text = dvInvoiceVsBooking.Table.Rows[0]["INVOICE_SERIAL_NO"].ToString();
                   
-                    GenerateInvoice();
+                    GenerateInvoice(true);
                     ModalPopupExtender1.Show();
                     btnMember.Enabled = false;
                 }
@@ -192,13 +192,13 @@ namespace DreamForex
             {
                 lblResult.Text = "Sorry, could not Save.. Try again later..<br />" + ex.ToString();
             }
-            SaveInvoiceDetails();
-            GenerateInvoice();
+
+            GenerateInvoice(false);
             btnMember.Enabled = false;
             ModalPopupExtender1.Show();
         }
 
-        private void SaveInvoiceDetails()
+        private void SaveInvoiceDetails(string totalamount, string cgst, string sgst, string igst, string hsnId)
         {
             ds_Invoice.InsertParameters["INVOICE_SERIAL_NO"].DefaultValue = txtInvoiceSerialNumber.Text;
             ds_Invoice.InsertParameters["DT_INVOICE"].DefaultValue = DateTime.Now.ToString();
@@ -206,10 +206,15 @@ namespace DreamForex
             ds_Invoice.InsertParameters["BOOKING_FLAG"].DefaultValue = "T";
             ds_Invoice.InsertParameters["LOGIN_ID"].DefaultValue = Session["iLoginId"].ToString();
             ds_Invoice.InsertParameters["PROCEED_TO"].DefaultValue = ddlProceedTo.SelectedItem.Text;
+            ds_Invoice.InsertParameters["AMOUNT_TOTAL"].DefaultValue = totalamount;
+            ds_Invoice.InsertParameters["CGST"].DefaultValue = cgst;
+            ds_Invoice.InsertParameters["SGST"].DefaultValue = sgst;
+            ds_Invoice.InsertParameters["IGST"].DefaultValue = igst;
+            ds_Invoice.InsertParameters["HSNID"].DefaultValue = hsnId;
             var response = ds_Invoice.Insert();
         }
 
-        public void GenerateInvoice()
+        public void GenerateInvoice(bool isAlreadyGenerated)
         {
             DataView dv = (DataView)dsCompany.Select(DataSourceSelectArguments.Empty);
             if (dv.Count > 0)
@@ -412,8 +417,12 @@ namespace DreamForex
                         lblAmtSGST.Text = iSgstAmt.ToString();
                         lblAmtIGST.Text = iIgstAmt.ToString();
                         lblAmtTotal.Text = (wRs + iCgstAmt + iSgstAmt + iIgstAmt).ToString();
-                        lblAmtWords.Text = Convert.ToInt32(wRs).ToWords();
-                        //*-*-*-*-*-*-*-*-*-*
+                        lblAmtWords.Text = Convert.ToInt32(lblAmtTotal.Text).ToWords();
+                        if (!isAlreadyGenerated)
+                        {
+                            SaveInvoiceDetails(lblAmtTotal.Text, lblAmtCGST.Text, lblAmtSGST.Text, lblAmtIGST.Text, lblHSN.Text);
+                        }
+                            //*-*-*-*-*-*-*-*-*-*
                     }
                     // *-*-*-*-*-*-*-*-*-*-*-*-*
                 }
